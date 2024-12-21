@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caça Palavras da Privacidade</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://storyboardppd.github.io/hq/tabuleiro.jpg');
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid #ccc;
+    }
+
+    header img {
+      margin-left: 10px;
+      height: 50px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5em;
+      color: #333;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    #buttons {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: white;
+      color: #009400;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #009400;
+      color: white;
+    }
+
+    #game-container {
+      display: flex;
+    }
+
+    #word-grid {
+      display: grid;
+      grid-template-columns: repeat(22, 30px);
+      gap: 0px;
+      background-color: rgba(0, 0, 0, 0.5);    
+      padding: 5px;
+color: white;
+    }
+
+    .grid-cell {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(192, 192, 192, 0.5);
+      border: 1px solid #ccc;
+      font-size: 1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .grid-cell.selected {
+      background-color: #ffa500;
+      color: white;
+      font-weight: bold;
+    }
+
+    #word-list {
+      margin-left: 20px;
+color: white;
+    }
+
+    #word-list ul {
+      list-style: none;     
+      margin-left: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #word-list li {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+color: white;
+    }
+
+    #word-list li.found {
+      text-decoration: line-through;
+      color: red;
+    }
+
+    footer {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      text-align: left;
+    }
+
+    #popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ADD8E6;
+      padding: 20px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      display: none;
+      text-align: center;
+    }
+
+    #popup h2 {
+      color: #008000;
+      margin: 0 0 20px;
+    }
+
+    #popup button {
+      padding: 10px 20px;
+      background-color: #008000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #popup button:hover {
+      background-color: #006400;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo">
+    <h1 style="font-family: Arial, sans-serif;  font-size: 26px; margin: 0;text-align:justify;color: #0000CC;">Palavras Cruzadas da Privacidade - Newsletter Fevereiro/2025</h1>
+  </header>
+  <main>
+    <div id="buttons">
+      <button id="start-button">Iniciar Jogo</button>
+      <button id="check-button">Verificar</button>
+    </div>
+    <div id="game-container">
+      <div id="word-grid"></div>
+      <div id="word-list">
+        <h2>Lista de Palavras</h2>
+        <ul>
+          <li>PRIVACIDADE</li>
+          <li>PROTEÇÃODEDADOS</li>
+          <li>TITULARDEDADOS</li>
+          <li>CONTROLADOR</li>
+          <li>PRIVACYBYDESIGN</li>
+          <li>SEGURANÇA</li>
+          <li>CONFIANÇA</li>
+          <li>ANONIMIZAÇÃO</li>
+          <li>AUTENTICIDADE</li>
+          <li>INTEGRIDADE</li>
+        </ul>
+      </div>
+    </div>
+    <div id="popup">
+      <h2></h2>
+      <button>Fechar</button>
+    </div>
+  </main>
+  <footer>
+    © 2025 Departamento de Privacidade e Proteção de Dados Pessoais. Todos os direitos reservados.
+  </footer>
+
+    <script>
+    const wordGrid = document.getElementById('word-grid');
+    const wordList = document.querySelectorAll('#word-list li');
+    const popup = document.getElementById('popup');
+    const popupMessage = popup.querySelector('h2');
+    const popupButton = popup.querySelector('button');
+
+    const words = [
+      'PRIVACIDADE', 'PROTEÇÃODEDADOS', 'TITULARDEDADOS', 'CONTROLADOR',
+      'PRIVACYBYDESIGN', 'SEGURANÇA', 'CONFIANÇA', 'ANONIMIZAÇÃO',
+      'AUTENTICIDADE', 'INTEGRIDADE'
+    ];
+
+    const gridSize = 22;
+    let gridArray = [];
+
+    function createGrid() {
+      wordGrid.innerHTML = '';
+      gridArray = Array.from({ length: gridSize }, () => Array(gridSize).fill(''));
+      placeWords();
+      fillGrid();
+      renderGrid();
+      wordList.forEach(word => word.classList.remove('found'));
+    }
+
+    function placeWords() {
+      const directions = ['horizontal', 'vertical'];
+      words.forEach(word => {
+        let placed = false;
+        while (!placed) {
+          const direction = directions[Math.floor(Math.random() * directions.length)];
+          const row = Math.floor(Math.random() * gridSize);
+          const col = Math.floor(Math.random() * gridSize);
+
+          if (canPlaceWord(word, row, col, direction)) {
+            insertWord(word, row, col, direction);
+            placed = true;
+          }
+        }
+      });
+    }
+
+    function canPlaceWord(word, row, col, direction) {
+      if (direction === 'horizontal' && col + word.length > gridSize) return false;
+      if (direction === 'vertical' && row + word.length > gridSize) return false;
+
+      for (let i = 0; i < word.length; i++) {
+        const r = direction === 'horizontal' ? row : row + i;
+        const c = direction === 'horizontal' ? col + i : col;
+
+        if (gridArray[r][c] && gridArray[r][c] !== word[i]) return false;
+      }
+
+      return true;
+    }
+
+    function insertWord(word, row, col, direction) {
+      for (let i = 0; i < word.length; i++) {
+        const r = direction === 'horizontal' ? row : row + i;
+        const c = direction === 'horizontal' ? col + i : col;
+        gridArray[r][c] = word[i];
+      }
+    }
+
+    function fillGrid() {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+          if (!gridArray[row][col]) {
+            gridArray[row][col] = letters.charAt(Math.floor(Math.random() * letters.length));
+          }
+        }
+      }
+    }
+
+    function renderGrid() {
+      gridArray.forEach((row, rIdx) => {
+        row.forEach((letter, cIdx) => {
+          const cell = document.createElement('div');
+          cell.textContent = letter;
+          cell.classList.add('grid-cell');
+          cell.dataset.row = rIdx;
+          cell.dataset.col = cIdx;
+          cell.addEventListener('click', () => toggleCellSelection(cell));
+          wordGrid.appendChild(cell);
+        });
+      });
+    }
+
+    function toggleCellSelection(cell) {
+      cell.classList.toggle('selected');
+    }
+
+    function checkWords() {
+      let foundCount = 0;
+      words.forEach((word, index) => {
+        if (isWordFound(word)) {
+          wordList[index].classList.add('found');
+          foundCount++;
+        }
+      });
+
+      const remaining = words.length - foundCount;
+      popupMessage.textContent = remaining === 0
+        ? 'Parabéns, você encontrou todas as palavras!'
+        : `Está quase lá... ainda faltam ${remaining} palavras.`;
+      popup.style.display = 'block';
+    }
+
+    function isWordFound(word) {
+      const cells = Array.from(document.querySelectorAll('.grid-cell.selected'));
+      const selectedCoords = cells.map(cell => {
+        return { row: +cell.dataset.row, col: +cell.dataset.col };
+      });
+
+      const directions = [
+        { row: 0, col: 1 }, // horizontal
+        { row: 1, col: 0 }  // vertical
+      ];
+
+      return directions.some(direction => {
+        return selectedCoords.some(start => {
+          return word.split('').every((letter, index) => {
+            const targetRow = start.row + direction.row * index;
+            const targetCol = start.col + direction.col * index;
+            const targetCell = cells.find(cell =>
+              +cell.dataset.row === targetRow && +cell.dataset.col === targetCol);
+            return targetCell && targetCell.textContent === letter;
+          });
+        });
+      });
+    }
+
+    document.getElementById('start-button').addEventListener('click', createGrid);
+    document.getElementById('check-button').addEventListener('click', checkWords);
+    popupButton.addEventListener('click', () => popup.style.display = 'none');
+
+    createGrid();
+  </script>
+</body>
+
