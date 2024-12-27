@@ -42,7 +42,7 @@
             display: flex;
             justify-content: center;
             gap: 50px; /* Espaço entre matriz e tabela */
-            margin-top: 70px;
+            margin-top: 30px; /* Espaço entre matriz e botões */
             width: 100%;
         }
 
@@ -57,8 +57,8 @@
         }
 
         td {
-            width: 30px;
-            height: 30px;
+            width: 25px; /* reflete no tamanho da célula da matriz */
+            height: 25px;  /* reflete no tamanho da célula da matriz */
             text-align: center;
             vertical-align: middle;
 	border: 1px solid #ccc; /* Inclui linhas e colunas na matriz */
@@ -70,7 +70,7 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            font-size: 16px;
+            font-size: 15px; /* tamanho da fonte a ser preenchida na mariz */
             text-transform: uppercase;
             border: none;
             outline: none;
@@ -81,16 +81,17 @@
             background-color: black;
             color: white;
             font-weight: bold;
+	font-size: 15px; /* tamanho da fonte a ser preenchida no cabeçalho da mariz */
         }
 
         .question-table {
    	border-collapse: collapse;
             text-align: left;
-            width: 550px; /* Largura fixa para a tabela de perguntas */
+            width: 450px; /* Largura fixa para a tabela de perguntas */
         }
 
         .question-table th, .question-table td {
-            
+           font-size: 14px; /* tamanho da fonte a ser preenchida na tabela de desafios */
 	border: 1px solid darkgray
             padding: 2px;
 	text-align: left;
@@ -113,10 +114,15 @@
             margin: 10px;
             font-size: 16px;
             cursor: pointer;
+	border-radius: 5px;
+	border: none;
+	background-color: #00712D;
+	color: white;
+	font-weight: bold;
         }
 
         button:hover {
-            background-color: #ddd;
+            background-color: #5CB338;
         }
 
         .correct {
@@ -194,6 +200,14 @@
             font-size: 12px;
         }
 
+ /* Estilo para a mensagem de finalização do jogo */
+        #result-message {
+            display: none;
+            margin: 05px;
+            font-size: 18px;
+            color: #FFF;
+        }
+
     </style>
 </head>
 
@@ -224,6 +238,8 @@
         <table id="grid"></table>
         <div id="question-container"></div>
     </main>
+
+   <div id="result-message"></div>
 
     <script>
         const gridSize = 15;
@@ -329,9 +345,9 @@
             container.appendChild(table);
         }
 
-           function checkAnswers() {
+function checkAnswers() {
     const table = document.getElementById("grid");
-    let allCorrect = true;
+    let allCorrect = true; // Flag para verificar se todas as respostas estão corretas
 
     crossword.forEach(({ answer, direction, startRow, startCol }) => {
         for (let i = 0; i < answer.length; i++) {
@@ -343,17 +359,47 @@
             if (input.value.toUpperCase() === answer[i]) {
                 input.classList.add("correct");
                 input.classList.remove("incorrect");
+                cell.style.backgroundColor = "#90EE90"; // Verde para resposta correta
             } else {
                 input.classList.add("incorrect");
                 input.classList.remove("correct");
-                allCorrect = false; // Identifica que há erros
+                cell.style.backgroundColor = "orange"; // Laranja para resposta incorreta
+                allCorrect = false; // Se alguma resposta estiver errada
             }
         }
     });
 
-    // Exibe o popup com a mensagem adequada
-    showPopup(allCorrect);
+    // Exibir mensagem de resultado após verificação
+    const resultMessage = document.getElementById("result-message");
+    if (allCorrect) {
+        resultMessage.innerText = "Parabéns! Todas as respostas estão corretas.";
+    } else {
+        resultMessage.innerText = "Algumas respostas estão incorretas. Tente novamente.";
+    }
+    resultMessage.style.display = 'block'; // Exibir mensagem de resultado
+
+    // Adicionar opções para continuar ou reiniciar
+    const continueButton = document.createElement("button");
+    continueButton.innerText = "Continuar Jogando";
+    continueButton.onclick = () => {
+        resultMessage.style.display = 'none'; // Esconder mensagem ao continuar
+        createQuestionTable(); // Recria a tabela de perguntas
+        document.getElementById("question-container").style.display = 'block'; // Certifique-se de que a tabela de perguntas está visível
+    };
+
+    const restartButton = document.createElement("button");
+    restartButton.innerText = "Reiniciar Jogo";
+    restartButton.onclick = () => {
+        resultMessage.style.display = 'none'; // Esconder mensagem
+        table.innerHTML = ''; // Limpar o grid
+        document.getElementById("question-container").innerHTML = ""; // Limpar perguntas
+        startGame(); // Reiniciar o jogo
+    };
+
+    resultMessage.appendChild(continueButton);
+    resultMessage.appendChild(restartButton);
 }
+
 
 function showPopup(isCorrect) {
     const popup = document.getElementById("popup");
@@ -390,7 +436,7 @@ function closePopup() {
     </script>
 
   <footer>
-    &  &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais. Todos os direitos reservados.
+    &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
   </footer>
 
 </body>
