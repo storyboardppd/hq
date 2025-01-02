@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sudoku Descolado</title>
+<style>
+
+body {
+font-family: Arial, sans-serif;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+margin: 0;
+background-color: #81BFDA;
+
+}
+.container {
+            background-color: #B1F0F7;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 500px;
+	text-align: center;
+}
+#board {
+display: inline-grid;
+grid-template-columns: repeat(9, auto);
+gap: 1px;
+background-color: #000;
+border: 2px solid #000;
+border-radius: 8px;
+}
+.cell {
+width: 40px;
+height: 40px;
+background-color: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 22px;
+font-weight: bold;
+}
+.cell input {
+width: 100%;
+height: 100%;
+border: none;
+text-align: center;
+font-size: 22px;
+font-weight: bold;
+}
+.cell:nth-child(3n) {
+border-right: 2px solid #000;
+}
+.cell:nth-child(n+19):nth-child(-n+27),
+.cell:nth-child(n+46):nth-child(-n+54) {
+border-bottom: 2px solid #000;
+}
+.given {
+background-color: #e0e0e0;
+}
+.correct {
+background-color: #a7e8a7;
+}
+.incorrect {
+background-color: #e8a7a7;
+}
+.controls {
+margin-bottom: 20px;
+}
+button, select {
+font-size: 16px;
+margin: 5px;
+padding: 5px 10px;
+}
+#timer, #hint-count {
+text-align: center;
+font-size: 18px;
+margin: 10px 0;
+}
+#hint-button {
+background-color: #3498db;
+}
+#hint-button:hover {
+background-color: #2980b9;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Sudoku Descolado</h1>
+<div class="controls">
+<select id="difficulty">
+<option value="easy">Fácil</option>
+<option value="medium">Médio</option>
+<option value="hard">Difícil</option>
+</select>
+<button onclick="startGame()">Novo Jogo</button>
+<button onclick="checkSolution()">Verificar</button>
+<button id="hint-button" onclick="getHint()">Dica</button>
+</div>
+<div id="difficulty-info"></div>
+<div id="timer">Tempo: 00:00</div>
+<div id="hint-count">Dicas restantes: 3</div>
+<div id="board"></div>
+</div>
+<script>
+let board = [];
+let solution = [];
+let timerInterval;
+let seconds = 0;
+let hintCount = 3;
+
+
+function createBoard() {
+    const boardDiv = document.getElementById('board');
+    boardDiv.innerHTML = '';
+    
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.row = i;
+            cell.dataset.col = j;
+            
+            if (board[i][j] !== 0) {
+                cell.classList.add('given');
+                cell.textContent = board[i][j];
+            } else {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.min = 1;
+                input.max = 9;
+                input.addEventListener('input', function() {
+                    validateInput(this, i, j);
+                });
+                cell.appendChild(input);
+            }
+            boardDiv.appendChild(cell);
+        }
+    }
+}
+
+function validateInput(input, row, col) {
+    // Limita o input a um único dígito
+    if (input.value.length > 1) {
+        input.value = input.value.slice(0, 1);
+    }
+    // Garante que o valor esteja entre 1 e 9
+    if (input.value < 1 || input.value > 9) {
+        input.value = '';
+    }
+    
+    const value = parseInt(input.value);
+    const cell = input.parentElement;
+    
+    // Remove classes anteriores
+    cell.classList.remove('correct', 'conflict');
+    
+    if (!isNaN(value)) {
+        // Verifica se o valor está correto
+        if (value === solution[row][col]) {
+            cell.classList.add('correct');
+        } else {
+            checkConflicts();
+        }
+    }
+}
+
+function checkConflicts() {
+    const cells = document.querySelectorAll('.cell');
+    const currentBoard = Array(9).fill().map(() => Array(9).fill(0));
+    
+    // Preenche o tabuleiro atual com os valores
+    cells.forEach((cell, index) => {
+        const row = Math.floor(index / 9);
+        const col = index % 9;
+        const input = cell.querySelector('input');
+        const value = input ? parseInt(input.value) : parseInt(cell.textContent);
+        if (!isNaN(value)) {
+            currentBoard[row][col] = value;
+        }
+    });
+    
+    // Remove todos os conflitos anteriores
+    cells.forEach(cell => cell.classList.remove('conflict'));
+    
+    // Verifica conflitos em linhas e colunas
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            const value = currentBoard[i][j];
+            if (value !== 0) {
+                // Verifica linha
+                for (let k = 0; k < 9; k++) {
+                    if (k !== j && currentBoard[i][k] === value) {
+                        cells[i * 9 + j].classList.add('conflict');
+                        cells[i * 9 + k].classList.add('conflict');
+                    }
+                }
+                // Verifica coluna
+                for (let k = 0; k < 9; k++) {
+                    if (k !== i && currentBoard[k][j] === value) {
+                        cells[i * 9 + j].classList.add('conflict');
+                        cells[k * 9 + j].classList.add('conflict');
+                    }
+                }
+                // Verifica quadrante 3x3
+                const boxRow = Math.floor(i / 3) * 3;
+                const boxCol = Math.floor(j / 3) * 3;
+                for (let m = boxRow; m < boxRow + 3; m++) {
+                    for (let n = boxCol; n < boxCol + 3; n++) {
+                        if (m !== i && n !== j && currentBoard[m][n] === value) {
+                            cells[i * 9 + j].classList.add('conflict');
+                            cells[m * 9 + n].classList.add('conflict');
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function generateSudoku() {
+    // Cria tabuleiros vazios
+    board = Array(9).fill().map(() => Array(9).fill(0));
+    solution = Array(9).fill().map(() => Array(9).fill(0));
+    
+    // Gera um tabuleiro válido
+    fillDiagonal();
+    solveSudoku(solution);
+    
+    // Copia a solução para o tabuleiro inicial
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            board[i][j] = solution[i][j];
+        }
+    }
+    
+    // Remove números com base na dificuldade
+    const difficulty = document.getElementById('difficulty').value;
+    const cellsToRemove = difficulty === 'easy' ? 40 : difficulty === 'medium' ? 50 : 60;
+    
+    for (let i = 0; i < cellsToRemove; i++) {
+        let row = Math.floor(Math.random() * 9);
+        let col = Math.floor(Math.random() * 9);
+        while (board[row][col] === 0) {
+            row = Math.floor(Math.random() * 9);
+            col = Math.floor(Math.random() * 9);
+        }
+        board[row][col] = 0;
+    }
+}
+
+function fillDiagonal() {
+    // Preenche os blocos diagonais 3x3
+    for (let i = 0; i < 9; i += 3) {
+        fillBox(i, i);
+    }
+}
+
+function fillBox(row, col) {
+    let num;
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            do {
+                num = Math.floor(Math.random() * 9) + 1;
+            } while (!isValidInBox(row, col, num));
+            solution[row + i][col + j] = num;
+        }
+    }
+}
+
+function isValidInBox(row, col, num) {
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (solution[row + i][col + j] === num) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function solveSudoku(grid) {
+    let row = 0;
+    let col = 0;
+    let isEmpty = false;
+    
+    for (let i = 0; i < 81; i++) {
+        row = Math.floor(i / 9);
+        col = i % 9;
+        
+        if (grid[row][col] === 0) {
+            isEmpty = true;
+            break;
+        }
+    }
+    
+    if (!isEmpty) {
+        return true;
+    }
+    
+    for (let num = 1; num <= 9; num++) {
+        if (isSafe(grid, row, col, num)) {
+            grid[row][col] = num;
+            if (solveSudoku(grid)) {
+                return true;
+            }
+            grid[row][col] = 0;
+        }
+    }
+    return false;
+}
+
+function isSafe(grid, row, col, num) {
+    // Verifica linha
+    for (let x = 0; x < 9; x++) {
+        if (grid[row][x] === num) return false;
+    }
+    
+    // Verifica coluna
+    for (let x = 0; x < 9; x++) {
+        if (grid[x][col] === num) return false;
+    }
+    
+    // Verifica box 3x3
+    let startRow = row - row % 3;
+    let startCol = col - col % 3;
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (grid[i + startRow][j + startCol] === num) return false;
+        }
+    }
+    
+    return true;
+}
+
+function checkSolution() {
+    const cells = document.querySelectorAll('.cell');
+    let isComplete = true;
+    
+    cells.forEach((cell, index) => {
+        const row = Math.floor(index / 9);
+        const col = index % 9;
+        const input = cell.querySelector('input');
+        const value = input ? parseInt(input.value) : parseInt(cell.textContent);
+        
+        if (isNaN(value) || value !== solution[row][col]) {
+            isComplete = false;
+        }
+    });
+    
+    if (isComplete) {
+        clearInterval(timerInterval);
+        const finalScore = calculateScore();
+        alert(`Parabéns! Você completou o Sudoku!\nTempo: ${formatTime(seconds)}\nPontuação final: ${finalScore}`);
+    } else {
+        alert('Ainda não está correto. Continue tentando!');
+    }
+}
+
+function calculateScore() {
+    const difficultyMultiplier = 
+        difficulty === 'easy' ? 1 :
+        difficulty === 'medium' ? 1.5 : 2;
+    const timeBonus = Math.max(0, 3600 - seconds);
+    return Math.round((10000 + timeBonus) * difficultyMultiplier);
+}
+
+function formatTime(totalSeconds) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function startGame() {
+    difficulty = document.getElementById('difficulty').value;
+    generateSudoku();
+    createBoard();
+    seconds = 0;
+    hintCount = 3; // Reseta o contador de dicas
+    clearInterval(timerInterval);
+    timerInterval = setInterval(updateTimer, 1000);
+    updateHintCount(); // Atualiza a exibição do contador de dicas
+    document.getElementById('timer').textContent = 'Tempo: 00:00';
+}
+
+function updateHintCount() {
+    document.getElementById('hint-count').textContent = `Dicas restantes: ${hintCount}`;
+}
+
+
+function updateTimer() {
+    seconds++;
+    document.getElementById('timer').textContent = `Tempo: ${formatTime(seconds)}`;
+}
+
+function getHint() {
+    if (hintCount > 0) {
+        const emptyCells = [];
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach((cell, index) => {
+            if (!cell.classList.contains('given') && !cell.classList.contains('correct')) {
+                emptyCells.push({ cell, index });
+            }
+        });
+
+        if (emptyCells.length > 0) {
+            const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            const row = Math.floor(randomCell.index / 9);
+            const col = randomCell.index % 9;
+            const input = randomCell.cell.querySelector('input');
+            
+            if (input) {
+                input.value = solution[row][col];
+                validateInput(input, row, col);
+            }
+            
+            hintCount--;
+            updateHintCount();
+        } else {
+            alert('Não há mais células vazias para dar dicas!');
+        }
+    } else {
+        alert('Você não tem mais dicas disponíveis!');
+    }
+}
+
+
+        // Inicia o jogo quando a página carregar
+        window.onload = startGame;
+    </script>
+</body>
+</html>
+
+
+
+
+
+
