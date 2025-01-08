@@ -9,12 +9,12 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://storyboardppd.github.io/hq/fundo/tabuleiro.jpg');
+            background-image: url('https://storyboardppd.github.io/hq/tabuleiro.jpg');
             background-size: cover;
             background-attachment: fixed;
         }
         header {
-            background-color: rgba(255, 255, 255, 0.8);
+	  background-color: #f0f0f0;
             padding: 10px;
             display: flex;
             align-items: center;
@@ -115,14 +115,30 @@
             background-color: rgba(0,0,0,0.4);
         }
         .popup-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
+            background-color: #FFD65A;
+            margin: 10% auto;
+            padding: 30px;
+	  border-radius: 10px;
             border: 1px solid #888;
             width: 80%;
-            max-width: 500px;
-            text-align: center;
+            max-width: 800px;
+	  text-align: left;
+	  max-height: 80vh;
+	  overflow-y: auto;
         }
+
+.explanation-text {
+    margin-top: 20px;
+    text-align: left;
+}
+
+#wordExplanations {
+    padding-left: 20px;
+}
+
+#wordExplanations li {
+    margin-bottom: 10px;
+}
         #wordCounter {
             text-align: center;
             font-size: 18px;
@@ -193,17 +209,23 @@
         </div>
     </div>
 
-    <div id="completionPopup" class="popup">
-        <div class="popup-content">
-            <h2>Parabéns!</h2>
-            <p>Você encontrou todas as palavras!</p>
-            <button onclick="closeCompletionPopup()">Fechar</button>
+<div id="completionPopup" class="popup">
+    <div class="popup-content">
+        <h2>Parabéns!</h2>
+        <p>Você encontrou todas as palavras relacionadas à Privacidade e Proteção de Dados!</p>
+        <div class="explanation-text">
+            <h2>Significado das palavras encontradas:</h2>
+            <ul id="wordExplanations">
+                <!-- As explicações serão inseridas aqui via JavaScript -->
+            </ul>
         </div>
+        <button onclick="closeCompletionPopup()">Fechar</button>
     </div>
+</div>
 
 
     <footer>
-        &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais. Todos os direitos reservados.
+        &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
     </footer>
 
     <script>
@@ -212,6 +234,20 @@
             "CRIPTOGRAFIA", "ANPD", "TRATAMENTO", "CONSENTIMENTO",
             "SIGILO", "SUBOPERADOR"
         ];
+
+// Objeto com as explicações das palavras
+const wordExplanations = {
+    "DISPONIBILIDADE": "Garantia de que os dados pessoais estejam disponíveis quando necessário, mantendo a integridade e segurança das informações.",
+    "TITULAR": "Pessoa natural a quem se referem os dados pessoais que são objeto de tratamento.",
+    "CONTROLADOR": "Pessoa natural ou jurídica responsável pelas decisões referentes ao tratamento de dados pessoais.",
+    "INCIDENTES": "Eventos adversos que podem comprometer a segurança dos dados pessoais.",
+    "CRIPTOGRAFIA": "Técnica de proteção que converte dados em código para preservar sua confidencialidade.",
+    "ANPD": "Autoridade Nacional de Proteção de Dados, órgão responsável por zelar pela proteção dos dados pessoais.",
+    "TRATAMENTO": "Toda operação realizada com dados pessoais, como coleta, produção, classificação, utilização e armazenamento.",
+    "CONSENTIMENTO": "Manifestação livre e informada pela qual o titular concorda com o tratamento de seus dados pessoais.",
+    "SIGILO": "Garantia de confidencialidade e proteção das informações pessoais.",
+    "SUBOPERADOR": "Pessoa contratada pelo operador para auxiliar no tratamento de dados pessoais."
+};
 
         const gridSize = 22;
         let grid = [];
@@ -445,13 +481,28 @@
             document.getElementById('wordCounter').textContent = `Palavras restantes: ${remainingWords}`;
         }
 
-        function showCompletionPopup() {
-            document.getElementById('completionPopup').style.display = 'block';
-        }
+// Função modificada para mostrar o popup com explicações
+function showCompletionPopup() {
+    const popup = document.getElementById('completionPopup');
+    const explanationsList = document.getElementById('wordExplanations');
+    
+    // Limpa a lista anterior
+    explanationsList.innerHTML = '';
+    
+    // Adiciona cada palavra encontrada e sua explicação
+    foundWords.forEach(word => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${word}</strong>: ${wordExplanations[word]}`;
+        explanationsList.appendChild(li);
+    });
+    
+    popup.style.display = 'block';
+}
 
-        function closeCompletionPopup() {
-            document.getElementById('completionPopup').style.display = 'none';
-        }
+// Função modificada para fechar o popup
+function closeCompletionPopup() {
+    document.getElementById('completionPopup').style.display = 'none';
+}
 
         function startGame() {
             placeWords();
