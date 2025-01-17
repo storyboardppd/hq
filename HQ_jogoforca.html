@@ -13,12 +13,12 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-	overflow: hidden; /* Impede a rolagem indesejada */
+            overflow: hidden;
         }
         header {
             display: flex;
             justify-content: center;
-	background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.8);
             align-items: center;
             padding: 10px 0;
             position: relative;
@@ -26,81 +26,69 @@
         header img {
             position: absolute;
             left: 10px;
-            height: 40px; /* Ajuste a altura conforme necessário */
-        }
-        #iniciarButton {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 20px;
-            background-color: green;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em; /* Tamanho da fonte mais responsivo */
-            position: relative; /* Para posicionar a dica em relação ao botão */
+            height: 40px;
         }
         #palavra {
-            font-size: 18px;
+            font-size: 28px;
             letter-spacing: 2px;
-            text-align: center; /* Centraliza a palavra secreta */
-            margin: 20px 0; /* Espaço acima e abaixo */
+            text-align: center;
+            margin: 60px 0 20px; /* Adicionei uma margem superior maior */
             color: white;
             font-weight: bold;
         }
         #info {
             display: flex;
-            justify-content: center; /* Centraliza as informações */
+            justify-content: center;
             align-items: center;
-            margin: 05px;
+            margin: 15px; /* Aumenta o espaço superior */
             width: 100%;
             color: white;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 20px;
         }
         #info div {
-            margin: 0 15px; /* Espaçamento entre os elementos */
-	  font-weight: bold;
-	  font-color: blue;
-        }
-        #teclado {
-            border: 2px solid gray;
-            border-radius: 10px;
-            padding: 10px;
-            display: table; /* Para centralizar a tabela */
-            margin: 5px auto; /* Espaço entre o teclado e os elementos */
-        }
-        .teclado {
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            gap: 4px;
-        }
-        .teclado button {
-            background-color: green;
-            color: white;
-            font-weight: bold;
-font-size: 0.7em;
-            border: none;
-            padding: 9px; /* Tamanho reduzido do botão */
-            cursor: pointer;
-	border-radius: 4px;
+            margin: 0 15px;
         }
         #game-container {
             max-width: 1100px;
-            margin: 6px auto;
+            margin: 16px auto; /* Aumenta o espaço superior */
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
             display: flex;
             justify-content: space-between;
+            height: 300px; /* Altura fixa do container */
         }
         #forca {
             text-align: center;
-            margin-right: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column; /* Alinha verticalmente os itens */
+            align-items: center; /* Centraliza horizontalmente */
+            justify-content: center; /* Centraliza verticalmente */
+        }
+        #forca img {
+            max-height: 100%; /* Adapta o tamanho da imagem à área disponível */
+            max-width: 100%; /* Impede que a imagem ultrapasse os limites */
+        }
+        #erros {
+            /*font-weight: bold; /* Define o texto como negrito */
+            font-size: 1.2em;
         }
         #perguntas {
             text-align: left;
-            margin-left: 20px;
-	font-size: 0.8em;
+            flex: 2;
+            font-size: 1.6em; /* Aumenta o tamanho do texto da pergunta */
+            display: flex;
+            flex-direction: column; /* Permite alinhar itens verticalmente */
+            align-items: center; /* Centraliza horizontalmente */
+            justify-content: center; /* Centraliza verticalmente */
+            text-align: center;
+        }
+        #incentivo {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px; /* Espaço acima da mensagem de incentivo */
         }
         footer {
             background-color: rgba(255, 255, 255, 0.8);
@@ -110,238 +98,266 @@ font-size: 0.7em;
             bottom: 0;
             width: 100%;
         }
-        #popup {
-            display: none;
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
+        #mensagem {
+            margin-top: 20px;
+            text-align: center;
             background-color: #F09319;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
             border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 100;
+            padding: 15px;
+            display: none; /* Esconde a mensagem inicialmente */
         }
+        #mensagem button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #mensagem button#sair {
+            background-color: red;
+        }
+        #mensagem span {
+            display: block;
+            margin-top: 10px;
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+        /* Overlay */
         #overlay {
-            display: none;
-	border: none;
-	border-radius: 5px;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 50;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
-
-        #tooltip {
-            display: none; /* Inicialmente escondido */
-            position: absolute; /* Posicionamento absoluto em relação ao botão */
-            background: #F09319;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 0.9em;
-            z-index: 101; /* Deve estar acima do botão */
-            width: 300px; /* Largura fixa para a dica */
+        #overlay-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            top: 90%; /* Coloca a dica logo abaixo do botão */
-            left: 50%;
-            transform: translateX(-50%);
+            max-width: 80%;
         }
-	.checkbox-item {
-	    margin-bottom: 10px; /* Ajuste o valor conforme necessário */
-	}
+        #overlay-content p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        #overlay-content button {
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            #game-container {
+                flex-direction: column;
+                height: auto;
+            }
+            #forca, #perguntas {
+                flex: none;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 20px;
+            }
+            #palavra {
+                font-size: 16px;
+            }
+            #info {
+                font-size: 16px;
+            }
+            #perguntas {
+                font-size: 1.2em;
+            }
+            #mensagem {
+                font-size: 1em;
+            }
+            #mensagem button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-    <img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo">
-    <h1 style="font-family: Arial, sans-serif;  font-size: 26px; margin: 0;text-align:justify;color: #0000CC;">Jogo da Forca - HQ Conectados</h1>
-  </header>
-
-    <button id="iniciarButton" 
-        onmouseover="mostrarDica()" 
-        onmouseout="esconderDica()" 
-        onclick="iniciarJogo()">Iniciar
-        <div id="tooltip">Selecione o desafio e use o "teclado virtual". Quantos pontos você consegue? </div>
-    </button>
-
-    <div id="teclado" style="display: none;">
-        <div class="teclado"></div>
-    </div>
+        <img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo">
+        <h1 style="font-family: Arial, sans-serif; font-size: 26px; margin: 0; text-align: justify; color: #0000CC;">Jogo da Forca - HQ Conectados</h1>
+    </header>
 
     <div id="palavra"></div>
-    <div id="info">
-        <div id="erros">Erros: 0</div>
-        <div id="pontuacao">Pontuação: 0</div>
-    </div>
     
     <div id="game-container">
         <div id="forca">
+            <div id="erros">Erros: 0</div>
             <img src="img1.png" alt="Forca" />
         </div>
-        <div id="perguntas"></div>
+        <div id="perguntas">
+            <p id="perguntaTexto"></p>
+            <p id="incentivo"></p>
+        </div>
+    </div>
+
+    <div id="mensagem">
+        <p id="mensagemTexto"></p>
+        <button onclick="proximaPergunta()">Próximo Desafio</button>
+        <button id="sair" onclick="sairJogo()">Sair</button>
+        <button id="reiniciar" style="display: none;" onclick="reiniciarJogo()">Sim</button>
+        <span id="resultados"></span>
     </div>
 
     <footer>
         &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
     </footer>
 
-    <div id="overlay"></div>
-    <div id="popup">
-        <p id="popupMessage"></p>
-        <button onclick="fecharPopup()">Fechar</button>
+    <div id="overlay">
+        <div id="overlay-content">
+            <p>Topa o desafio de aprender brincando? Adivinhe a palavra secreta.</p>
+            <button onclick="fecharOverlay()">Prosseguir</button>
+        </div>
     </div>
 
     <script>
         const perguntas = [
-            { question: "Tipo de programa malicioso criado para prejudicar sistemas; pode roubar informações ou danificar arquivos", answer: "MALWARE", nota: 10 },
-            { question: "Rede sem fio aberta, com sinal compartilhado de internet para qualquer pessoa usar. Evite acessar contas bancárias dessas redes", answer: "WIFIPUBLICO", nota: 10 },
-            { question: "Parte 'oculta' da internet acessível somente por ferramentas específicas. Pode ser utilizado para a prática de ações ilegais", answer: "DARKWEB", nota: 10 },
-            { question: "Na HQ é o local onde ficam expostos nossos dados pessoais para todos, se não formos cautelosos", answer: "CIDADEDAEXPOSICAO", nota: 10 },
-            { question: "Entrada em sistemas protegida por autenticação, como 2FA. Usar senhas fortes e 2FA garante maior segurança", answer: "LOGINSEGURO", nota: 10 },
-            { question: "Programa que protege seu computador ou celular contra ameaças virtuais", answer: "ANTIVIRUS", nota: 10 },
-            { question: "São práticas usadas por golpistas para enganar e causar prejuízo aos usuários online, como fishing e instalação de apps maliciosos", answer: "ARMADILHAS", nota: 10 },
-            { question: "Evitar o uso prolongado nas redes sociais; proteger seus dados pessoais evitando exposição desnecessária; ativar medidas de segurança", answer: "BOASPRATICAS", nota: 10 },
-            { question: "Meio de interação que possibilita você se comunicar com um programa, que pode ser uma ferramenta de IA. ", answer: "INTERFACE", nota: 10 },
-	    { question: "Local, na HQ Conectados, que mostra como se sente quem fica conectado por muito tempo. Com insônia, cansaço mental e isolamento social", answer: "FLORESTADOESQUECIMENTO", nota: 10 }
+            { question: "Tipo de programa malicioso criado para prejudicar sistemas; pode roubar informações ou danificar arquivos", answer: "MALWARE" },
+            { question: "Rede sem fio aberta, com sinal compartilhado de internet para qualquer pessoa usar. Evite acessar contas bancárias dessas redes", answer: "WIFIPUBLICO" },
+            { question: "Parte 'oculta' da internet acessível somente por ferramentas específicas. Pode ser utilizado para a prática de ações ilegais", answer: "DARKWEB" },
+            { question: "Na HQ é o local onde ficam expostos nossos dados pessoais para todos, se não formos cautelosos", answer: "CIDADEDAEXPOSICAO" },
+            { question: "Entrada em sistemas protegida por autenticação, como 2FA. Usar senhas fortes e 2FA garante maior segurança", answer: "LOGINSEGURO" },
+            { question: "Programa que protege seu computador ou celular contra ameaças virtuais", answer: "ANTIVIRUS" },
+            { question: "São práticas usadas por golpistas para enganar e causar prejuízo aos usuários online, como fishing e instalação de apps maliciosos", answer: "ARMADILHAS" },
+            { question: "Evitar o uso prolongado nas redes sociais; proteger seus dados pessoais evitando exposição desnecessária; ativar medidas de segurança", answer: "BOASPRATICAS" },
+            { question: "Meio de interação que possibilita você se comunicar com um programa, que pode ser uma ferramenta de IA.", answer: "INTERFACE" },
+            { question: "Local, na HQ Conectados, que mostra como se sente quem fica conectado por muito tempo. Com insônia, cansaço mental e isolamento social", answer: "FLORESTADOESQUECIMENTO" }
         ];
 
         let palavraSecreta = '';
         let letrasAdivinhadas = [];
         let erros = 0;
-        let pontuacao = 0;
-        let desafiosConcluidos = 0; // Contador de desafios concluídos
-//        let contador_checkbox_selecionados = 0;
-        let contador_acertos = 0;
-        let contador_erros = 0;
+        let acertosTotais = 0;
+        let errosTotais = 0;
+        let perguntasRestantes = [...perguntas]; // Copia das perguntas restantes
 
-        // Função para iniciar o jogo
+        document.addEventListener('DOMContentLoaded', iniciarJogo);
+
+        // Permitir uso do teclado convencional
+        document.addEventListener('keydown', (event) => {
+            const letra = event.key.toUpperCase();
+            if (/^[A-Z]$/.test(letra)) { // Verifica se a tecla pressionada é uma letra
+                adivinhar(letra);
+            }
+        });
+
+        // Função para iniciar ou reiniciar o jogo
         function iniciarJogo() {
-            const perguntasDiv = document.getElementById('perguntas');
-            perguntasDiv.innerHTML = '';
-            perguntas.forEach((pergunta, index) => {
-        perguntasDiv.innerHTML += `<div class="checkbox-item">
-            <input type="checkbox" id="pergunta${index}" value="${pergunta.answer}" data-nota="${pergunta.nota}" onchange="selecionarPergunta(this)"> 
-            ${pergunta.question} (${pergunta.nota})
-        </div>`;
-            });
+            if (perguntasRestantes.length === 0) {
+                mostrarMensagemFinal();
+                return;
+            }
 
-            // Exibe o teclado virtual
-            document.getElementById('teclado').style.display = 'table'; 
-            resetarJogo(); // Reseta o estado do jogo
-        }
-
-// Função para mostrar a dica
-        function mostrarDica() {
-            document.getElementById('tooltip').style.display = 'block';
-        }
-
-        // Função para esconder a dica
-        function esconderDica() {
-            document.getElementById('tooltip').style.display = 'none';
-        }
-
-        // Função para selecionar a pergunta
-        function selecionarPergunta(checkbox) {
-            const checkboxes = document.querySelectorAll('input[type=checkbox]');
-            checkboxes.forEach(cb => {
-                if (cb !== checkbox) {
-                    cb.disabled = true; // Desabilita outros checkboxes
-                } else {
-                    cb.checked = true; // Marca a checkbox selecionada
-                }
-            });
-            palavraSecreta = checkbox.value;
-            letrasAdivinhadas = [];
-            erros = 0;
-//	  contador_checkbox_selecionados++; // Incrementa o contador de checkboxes que foram selecionados
+            resetarJogo();
+            const index = Math.floor(Math.random() * perguntasRestantes.length);
+            const perguntaAleatoria = perguntasRestantes.splice(index, 1)[0];
+            palavraSecreta = perguntaAleatoria.answer;
+            document.getElementById('perguntaTexto').innerText = perguntaAleatoria.question;
             mostrarPalavra();
-            atualizarForca();
-            criarTeclado();
         }
 
-        // Função para mostrar a palavra
         function mostrarPalavra() {
             const palavraDisplay = palavraSecreta.split('').map(letra => letrasAdivinhadas.includes(letra) ? letra : '_').join(' ');
             document.getElementById('palavra').innerText = palavraDisplay;
             document.getElementById('erros').innerText = `Erros: ${erros}`;
-            document.getElementById('pontuacao').innerText = `Pontuação acumulada: ${pontuacao}`;
-
-           // Verifica se a palavra foi adivinhada corretamente
             if (!palavraDisplay.includes('_')) {
-                const checkbox = document.querySelector('input[type=checkbox]:checked');
-                pontuacao += parseInt(checkbox.getAttribute('data-nota')); // Acumula pontos de acordo com a nota da pergunta
-//               desafiosConcluidos++; // Incrementa o contador de desafios
-               contador_acertos++;
-//	      alert('variável respostas corretas ' + desafiosConcluidos);
+                acertosTotais++;
+                mostrarMensagem("Parabéns! Você acertou! Deseja continuar?");
+            } else if (erros >= 6) {
+                errosTotais++;
+                mostrarMensagem(`Você perdeu! A palavra era: ${palavraSecreta}. Deseja continuar?`);
+            }
+        }
 
-	// Verifica quantidade de respostas certas 
-         if (desafiosConcluidos === 10) { 
-                    mostrarMensagemPersonalizada(); // Chama a função para mostrar a mensagem personalizada
-                } else {
-              mostrarPopup(`Você acertou e tem ${pontuacao} pontos acumulados!`);
-	    document.getElementById('pontuacao').innerText = `Pontuação acumulada: ${pontuacao}`; //atualiza a seção Info (by Marco)
+        function mostrarMensagem(mensagem) {
+            const mensagemDiv = document.getElementById('mensagem');
+            document.getElementById('mensagemTexto').innerText = mensagem;
+            document.getElementById('resultados').innerHTML = `Acertos: ${acertosTotais} - Erros: ${errosTotais}`;
+            if (acertosTotais > 5) {
+                let mensagemIncentivo = '';
+                switch (acertosTotais) {
+                    case 6:
+                        mensagemIncentivo = 'Você está indo muito bem!';
+                        break;
+                    case 7:
+                        mensagemIncentivo = 'Que demais, vamos em frente!';
+                        break;
+                    case 8:
+                        mensagemIncentivo = 'Você é fera mesmo, hein?!';
+                        break;
+                    case 9:
+                        mensagemIncentivo = 'UAU... é (a)o Ninja no tema!';
+                        break;
+                    case 10:
+                        mensagemIncentivo = 'Show! Abram alas para a(o) Mestre Jedai da Privacidade!';
+                        break;
                 }
-	
-                habilitarCheckboxes();
-           //     reiniciarJogo(); // Reinicia o jogo após acerto
+                document.getElementById('incentivo').innerHTML = mensagemIncentivo;
+            } else {
+                document.getElementById('incentivo').innerHTML = '';
             }
-            if (erros >= 7) {
-                   contador_erros++;
-		mostrarPopup(`Você errou! A palavra era: ${palavraSecreta}`);
-                   habilitarCheckboxes();
-   //             reiniciarJogo(); // Reinicia o jogo após erro
-            }
-
-	// Verifica se respondeu as 10 questões, ejam certas ou erradas
-	if ((contador_erros + contador_acertos) === 10) {  	
-		mostrarMensagemPersonalizada(); 
-	}
+            mensagemDiv.style.display = 'block';
+            document.querySelector('#mensagem button').focus(); // Foca no botão "Próximo Desafio"
         }
 
-
-        // Função para mostrar a mensagem personalizada
-        function mostrarMensagemPersonalizada() {
-            let mensagem = '';
-            if (pontuacao <= 60) {
-                mensagem = `Você obteve ${pontuacao} pontos e está no caminho do aprendizado!`;
-            } else if (pontuacao >= 70 && pontuacao < 100) {
-                mensagem = `Muito bom! Você conquistou ${pontuacao} pontos e é um Ninja da Privacidade!!`;
-            } else if (pontuacao === 100) {
-                mensagem = "Excelente desempenho!! Superou as expectativas. É o Mestre Jedi da Privacidade!";
-            }
-            mostrarPopup(mensagem);
+        function mostrarMensagemFinal() {
+            const mensagemDiv = document.getElementById('mensagem');
+            document.getElementById('mensagemTexto').innerText = 'Você completou todas as questões! Deseja recomeçar?';
+            document.getElementById('resultados').innerHTML = `Acertos: ${acertosTotais} - Erros: ${errosTotais}`;
+            document.querySelector('button[onclick="proximaPergunta()"]').style.display = 'none';
+            document.getElementById('reiniciar').style.display = 'inline';
+            mensagemDiv.style.display = 'block';
+            document.querySelector('#mensagem button').focus();
         }
 
-        // Função para habilitar checkboxes
-        function habilitarCheckboxes() {
-            const checkboxes = document.querySelectorAll('input[type=checkbox]');
-            checkboxes.forEach(cb => {
-                if (!cb.checked) {
-                    cb.disabled = false; // Habilita apenas os checkboxes não selecionados
-                }
-            });
+        function proximaPergunta() {
+            const mensagemDiv = document.getElementById('mensagem');
+            mensagemDiv.style.display = 'none'; // Esconde a mensagem
+            iniciarJogo(); // Carrega uma nova pergunta
         }
 
-        // Função para reiniciar o jogo
-        function resetarJogo() {
-            letrasAdivinhadas = [];
-            erros = 0;
-            desafiosConcluidos = 0
-            pontuacao = 0; // Reseta a pontuação
-            document.getElementById('palavra').innerText = '';
-            document.getElementById('forca').innerHTML = `<img src="img/img1.png" alt="Forca" />`;
-            document.getElementById('erros').innerText = 'Erros: 0';
-            document.getElementById('pontuacao').innerText = 'Pontuação: 0';
-            document.querySelector('.teclado').innerHTML = ''; // Limpa o teclado
-            criarTeclado(); // Chama a função para criar o teclado
+        function sairJogo() {
+            const mensagemDiv = document.getElementById('mensagem');
+            mensagemDiv.style.display = 'none';
+            alert("Obrigado por jogar! Até a próxima!");
+            window.close(); // Tenta fechar a janela do navegador
         }
 
-        // Função para adivinhar letras
+        function reiniciarJogo() {
+            perguntasRestantes = [...perguntas]; // Reinicia as perguntas
+            acertosTotais = 0;
+            errosTotais = 0;
+            document.getElementById('reiniciar').style.display = 'none';
+            document.querySelector('button[onclick="proximaPergunta()"]').style.display = 'inline';
+            proximaPergunta(); // Inicia uma nova rodada
+        }
+
         function adivinhar(letra) {
             if (letra && !letrasAdivinhadas.includes(letra)) {
                 letrasAdivinhadas.push(letra);
@@ -353,42 +369,22 @@ font-size: 0.7em;
             }
         }
 
-        // Função para atualizar a figura da forca
         function atualizarForca() {
-            document.getElementById('forca').innerHTML = `<img src="img/img${Math.min(erros + 1, 7)}.png" alt="Forca">`;
+            document.getElementById('forca').querySelector('img').src = `img/img${Math.min(erros + 1, 7)}.png`;
         }
 
-        // Função para criar o teclado virtual
-        function criarTeclado() {
-            const tecladoDiv = document.querySelector('.teclado');
-            tecladoDiv.innerHTML = '';
-            const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-            letras.forEach(letra => {
-                const button = document.createElement('button');
-                button.innerText = letra;
-                button.onclick = () => adivinhar(letra); // Chama a função adivinhar com a letra selecionada.
-                tecladoDiv.appendChild(button);
-            });
+        function resetarJogo() {
+            letrasAdivinhadas = [];
+            erros = 0;
+            document.getElementById('palavra').innerText = '';
+            document.getElementById('forca').querySelector('img').src = `img/img1.png`;
+            document.getElementById('erros').innerText = 'Erros: 0';
+            document.getElementById('incentivo').innerHTML = ''; // Limpa a mensagem de incentivo
         }
 
-        // Função para mostrar o popup
-        function mostrarPopup(mensagem) {
-            document.getElementById('popupMessage').innerText = mensagem;
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
-
-        // Função para fechar o popup
-        function fecharPopup() {
-            document.getElementById('popup').style.display = 'none';
+        function fecharOverlay() {
             document.getElementById('overlay').style.display = 'none';
         }
-
-        // Executar funções após o carregamento da página
-        document.addEventListener('DOMContentLoaded', () => {
-            iniciarJogo(); // Chama a função para iniciar o jogo
-            criarTeclado(); // Chama a função para criar o teclado
-        });
     </script>
 </body>
 </html>
