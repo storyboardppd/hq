@@ -72,8 +72,8 @@
             max-width: 100%; /* Impede que a imagem ultrapasse os limites */
         }
         #erros {
-             /*font-weight: bold; /* Define o texto como negrito */
-	font-size: 1.2em;
+            font-weight: bold; /* Define o texto como negrito */
+            font-size: 1.2em;
         }
         #perguntas {
             text-align: left;
@@ -346,6 +346,7 @@
         }
 
         function sairJogo() {
+            window.open('', '_self', ''); // Hack para permitir o fechamento da janela em alguns navegadores
             window.close(); // Tenta fechar a janela do navegador
         }
 
