@@ -3,441 +3,588 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Palavras Cruzadas da Privacidade e Proteção de Dados Pessoais - Jan/2025</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-	background: url("https://storyboardppd.github.io/hq/fundo/fundo_2.jpg") no-repeat center center fixed;;
-            background-size: cover;
-            color: #000;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    <title>Palavras Cruzadas - Newsletter Jan/2025</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: url("https://storyboardppd.github.io/hq/fundo/fundo_2.jpg") no-repeat center center fixed;
+        background-size: cover;
+        color: #000;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-          background-color: rgba(255, 255, 255, 0.8);
-            color: white;
-            width: 100%;
-            box-sizing: border-box;
-        }
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: black;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-        header img {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-        }
+    header img {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
 
-        header h1 {
-            margin: 0;
-        }
+    header h1 {
+        margin: 0;
+        font-size: 26px;
+        text-align: justify;
+        color: #0000CC;
+    }
 
-        main {
-            display: flex;
-            justify-content: center;
-            gap: 50px; /* Espaço entre matriz e tabela */
-            margin-top: 30px; /* Espaço entre matriz e botões */
-            width: 100%;
-        }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px; /* Espaçamento entre os containers */
+        margin-top: 10px; /* Aproxime mais o topo do GRID da borda superior do container */
+        background-color: rgba(211, 211, 211, 0.7); /* Cinza claro com opacidade */
+        padding: 20px;
+        border-radius: 10px;
+        /* Alterar altura e largura do container */
+    }
 
-        table {
-            border-collapse: collapse;
-	margin: 20px auto;
-            table-layout: fixed;
-        }
+    .grid-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        #grid {
-            margin: 0;
-        }
+    .question-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 
-        td {
-            width: 25px; /* reflete no tamanho da célula da matriz */
-            height: 25px;  /* reflete no tamanho da célula da matriz */
-            text-align: center;
-            vertical-align: middle;
-	border: 1px solid #ccc; /* Inclui linhas e colunas na matriz */
-            background-color: transparent; /* fundo transparente na matriz */
-            position: relative;
-        }
+    table {
+        border-collapse: separate;
+        border-spacing: 3px; /* Espaçamento entre as células */
+        margin: 20px auto; /* Aproxime mais o topo do GRID da borda superior do container */
+        table-layout: fixed;
+    }
 
-        td input {
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            font-size: 15px; /* tamanho da fonte a ser preenchida na mariz */
-            text-transform: uppercase;
-            border: none;
-            outline: none;
-            background: transparent;
-        }
+    #grid {
+        margin-top: 10px; /* Aproxime mais o topo do GRID da borda superior do container */
+    }
 
-        .header {
-            background-color: black;
-            color: white;
-            font-weight: bold;
-	font-size: 15px; /* tamanho da fonte a ser preenchida no cabeçalho da mariz */
-        }
+    td {
+        width: 28px; /* 130% da largura da fonte */
+        height: 28px; /* 130% da altura da fonte */
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #ccc;
+        background-color: transparent;
+        position: relative;
+        border-radius: 8px; /* Cantos arredondados */
+    }
 
-        .question-table {
-   	border-collapse: collapse;
-            text-align: left;
-            width: 450px; /* Largura fixa para a tabela de perguntas */
-        }
+    td input {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        font-size: 20px; /* Tamanho maior da fonte */
+        text-transform: uppercase;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-weight: normal;
+        border-radius: 8px; /* Cantos arredondados */
+    }
 
-        .question-table th, .question-table td {
-           font-size: 14px; /* tamanho da fonte a ser preenchida na tabela de desafios */
-	border: 1px solid darkgray
-            padding: 2px;
-	text-align: left;
-	border-left: none;
-	border-right: none;
-        }
+    .header {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        font-size: 15px;
+    }
 
-        .horizontal-questions {
-            color: white;
-            font-weight: normal;
-        }
+    .correct {
+        background-color: #90EE90; /* Verde claro para resposta correta */
+        color: black;
+        font-weight: bold;
+    }
 
-        .vertical-questions {
-            color: white;
-            font-weight: normal;
-        }
+    .incorrect {
+        background-color: orange; /* Laranja */
+        color: black;
+    }
 
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            cursor: pointer;
-	border-radius: 5px;
-	border: none;
-	background-color: #00712D;
-	color: white;
-	font-weight: bold;
-        }
+    .indicator {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        background-color: yellow;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: black;
+    }
 
-        button:hover {
-            background-color: #5CB338;
-        }
+    #result-bar {
+        background-color: orange;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        padding: 15px; /* Altura dobrada */
+        margin-top: 10px; /* Colocada abaixo do grid */
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        .correct {
-            background-color: #90EE90; /* Verde claro */
-        }
+    footer {
+        background-color: #f0f0f0;
+        text-align: left;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
 
-        .incorrect {
-            background-color: orange; /* Laranja */
-        }
+    #question-container {
+        max-width: 550px;
+    }
 
-        footer {
-            background-color: #f0f0f0;
-      	text-align: left;
-	font-family: Arial, sans-serif;  
-	font-size: 16px;
-      	padding: 10px;
-      	position: fixed;
-      	bottom: 0;
-      	width: 100%;
-        }
+    #question-container ul {
+        list-style: none;
+        padding-left: 0;
+    }
 
-.popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
+    #question-container ul li {
+        margin-bottom: 5px; /* Aumentar espaço entre as linhas */
+        font-size: 14px;
+    }
 
-.popup-content {
-    background-color: #add8e6; /* Azul claro */
-    opacity: 0.91;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    color: green; /* Letras em verde */
-    font-size: 14px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+    #check-answers {
+        margin-top: 15px;
+        padding: 10px 20px;
+        font-size: 14px;
+        background-color: #0000CC;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-.popup-content button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background: #F09319;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+    #actions {
+        display: none;
+        margin-top: 5px;
+        text-align: center;
+    }
 
-.popup-content button:hover {
-    background-color: #006400; /* Verde mais escuro */
-}
+    #actions button {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-.hidden {
-    display: none; /* Esconde o popup */
-}
+    #play-again {
+        background-color: #4CAF50;
+        color: white;
+    }
 
-/* Estilo para a mensagem de dica */
-        #tooltip {
-            display: none;
-            position: absolute;
-            background: #F09319;
-            border: 1px solid #ccc;
-            padding: 8px;
-            border-radius: 5px;
-            z-index: 1000;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            font-size: 12px;
-        }
+    #exit {
+        background-color: #f44336;
+        color: white;
+    }
+ 
+</style>
 
- /* Estilo para a mensagem de finalização do jogo */
-        #result-message {
-            display: none;
-            margin: 05px;
-            font-size: 18px;
-            color: #FFF;
-        }
-
-    </style>
 </head>
-
-<div id="popup" class="popup hidden">
-    <div class="popup-content">
-        <p id="popup-message"></p>
-        <button onclick="closePopup()">Fechar</button>
-    </div>
-</div>
-
 
 <body>
     <header>
-        <div style="display: flex; align-items: center; color: #0000CC;">
-<img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo" style="width: 125px; height: 43px; margin-right: 25px;">
-            <h1 style="font-family: Arial, sans-serif;  font-size: 26px; margin: 0;text-align:justify;color: #0000CC;">Palavras Cruzadas - Newsletter Jan/2025</h1>
+        <div style="display: flex; align-items: center;">
+            <img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo" style="width: 125px; height: 43px; margin-right: 25px;">
+            <h1>Palavras Cruzadas - Newsletter Jan/2025</h1>
         </div>
     </header>
 
-    <div style="text-align: center;">
-        <button id="startButton" onmouseover="showTooltip(event)" onmouseout="hideTooltip()" onclick="startGame()">Iniciar Jogo</button>
-        <button onclick="checkAnswers()">Conferir Respostas</button>
-        <div id="tooltip"></div> <!-- Div para a mensagem de dica -->
+    <div class="container">
+        <div class="grid-container">
+            <table id="grid"></table>
+        </div>
+        <div class="question-container" id="question-container">
+            <h2>Palavras Horizontais:</h2>
+            <ul id="horizontal-questions"></ul>
+            <h2>Palavras Verticais:</h2>
+            <ul id="vertical-questions"></ul>
+        </div>
     </div>
 
-    <!-- Área principal com a matriz e tabela lado a lado -->
-    <main>
-        <table id="grid"></table>
-        <div id="question-container"></div>
-    </main>
+    <div id="result-bar">
+        <button id="check-answers">Conferir Respostas</button>
+        <div id="actions">
+            <p id="result-message"></p>
+            <button id="play-again">Jogar novamente</button>
+            <button id="exit">Sair</button>
+        </div>
+    </div>
 
-   <div id="result-message"></div>
+    <footer>
+        &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
+    </footer>
+</body>
 
-    <script>
-        const gridSize = 15;
+<script>
+    const gridSize = 15;
+    let correctWordsCount = 0; // Contador de palavras corretas
+    let currentWord = null; // Palavra atual sendo preenchida
 
-        const questions = [
-  { question: "Princípio que garante consulta facilitada e gratuita sobre a forma e a duração do tratamento de seus dados pessoais", answer: "LIVREACESSO" },
-            { question: "Remoção de informações pessoais de modo que a pessoa não possa ser identificada, segundo a LGPD", answer: "ANONIMIZACAO" },
-            { question: "PrivacyBy........ visa proteger a privacidade dos dados pessoais desde a concepção", answer: "DEFAULT" },
-            { question: "Pessoa indicada por agente de tratamento para atuar como canal de comunicação com titulares e ANPD", answer: "ENCARREGADO" },
-            { question: "Exemplo de tratamento de dados pessoais", answer: "ARMAZENAMENTO" },
-            { question: "Agente de tratamento de dados pessoais", answer: "OPERADOR" },
-            { question: "Informação relacionada a pessoa natural identificada ou identificável", answer: "DADOPESSOAL" },
-            { question: "Visa garantir que os dados e sistemas estão acessíveis e funcionando quando necessário", answer: "DISPONIBILIDADE" },
-            { question: "Hipótese de não aplicação da LGPD quando os dados pessoais são tratados exclusivamente para...", answer: "DEFESANACIONAL" },
-            { question: "Documentação do controlador que descreve os processos de tratamento de dados pessoais que podem gerar riscos ao titular e as salvaguardas e mecanismos para mitigar riscos", answer: "RIPD" }
-        ];
+    const crossword = [
+        { question: "Princípio que garante consulta facilitada e gratuita sobre a forma e a duração do tratamento de seus dados pessoais", answer: "LIVREACESSO", direction: "horizontal", startRow: 1, startCol: 1 },
+        { question: "Remoção de informações pessoais de modo que a pessoa não possa ser identificada, segundo a LGPD", answer: "ANONIMIZACAO", direction: "vertical", startRow: 1, startCol: 6 },
+        { question: "PrivacyBy........ visa proteger a privacidade dos dados pessoais desde a concepção", answer: "DEFAULT", direction: "horizontal", startRow: 4, startCol: 8 },
+        { question: "Pessoa indicada por agente de tratamento para atuar como canal de comunicação com titulares e ANPD", answer: "ENCARREGADO", direction: "vertical", startRow: 3, startCol: 3 },
+        { question: "Exemplo de tratamento de dados pessoais", answer: "ARMAZENAMENTO", direction: "horizontal", startRow: 8, startCol: 2 },
+        { question: "Agente de tratamento de dados pessoais", answer: "OPERADOR", direction: "vertical", startRow: 6, startCol: 11 },
+        { question: "Informação relacionada a pessoa natural identificada ou identificável", answer: "DADOPESSOAL", direction: "horizontal", startRow: 12, startCol: 3 },
+        { question: "Visa garantir que os dados e sistemas estão acessíveis e funcionando quando necessário", answer: "DISPONIBILIDADE", direction: "vertical", startRow: 1, startCol: 15 },
+        { question: "Hipótese de não aplicação da LGPD quando os dados pessoais são tratados exclusivamente para...", answer: "DEFESANACIONAL", direction: "horizontal", startRow: 15, startCol: 1 },
+        { question: "Documentação do controlador que descreve os processos de tratamento de dados pessoais que podem gerar riscos ao titular e as salvaguardas e mecanismos para mitigar riscos", answer: "RIPD", direction: "vertical", startRow: 12, startCol: 1 }
+    ];
 
-        const crossword = [
-            { question: questions[0].question, answer: questions[0].answer, direction: "horizontal", startRow: 1, startCol: 1 },
-            { question: questions[1].question, answer: questions[1].answer, direction: "vertical", startRow: 1, startCol: 6 },
-            { question: questions[2].question, answer: questions[2].answer, direction: "horizontal", startRow: 4, startCol: 8 },
-            { question: questions[3].question, answer: questions[3].answer, direction: "vertical", startRow: 3, startCol: 3 },
-            { question: questions[4].question, answer: questions[4].answer, direction: "horizontal", startRow: 8, startCol: 2 },
-            { question: questions[5].question, answer: questions[5].answer, direction: "vertical", startRow: 6, startCol: 11 },
-            { question: questions[6].question, answer: questions[6].answer, direction: "horizontal", startRow: 12, startCol: 3 },
-            { question: questions[7].question, answer: questions[7].answer, direction: "vertical", startRow: 1, startCol: 15 },
-            { question: questions[8].question, answer: questions[8].answer, direction: "horizontal", startRow: 15, startCol: 1 },
-            { question: questions[9].question, answer: questions[9].answer, direction: "vertical", startRow: 12, startCol: 1 }
-        ];
+    window.onload = function () {
+        createGrid();
+        initializeCrossword();
+        displayQuestions();
+        document.getElementById('check-answers').addEventListener('click', checkAnswers);
+        document.getElementById('play-again').addEventListener('click', playAgain);
+        document.getElementById('exit').addEventListener('click', exitGame);
+        focusFirstCell();
+    };
 
-        function createGrid() {
-            const table = document.getElementById('grid');
-            table.innerHTML = '';
-            for (let i = 0; i <= gridSize; i++) {
-                const row = document.createElement('tr');
-                for (let j = 0; j <= gridSize; j++) {
-                    const cell = document.createElement('td');
-                    if (i === 0 && j > 0) {
-                        cell.textContent = j;
-                        cell.classList.add('header');
-                    } else if (j === 0 && i > 0) {
-                        cell.textContent = i;
-                        cell.classList.add('header');
-                    } else if (i > 0 && j > 0) {
-                        const input = document.createElement('input');
-                        input.setAttribute('maxlength', '1');
-                        input.disabled = true;
-                        cell.appendChild(input);
-                    }
-                    row.appendChild(cell);
-                }
-                table.appendChild(row);
+    function createGrid() {
+        const table = document.getElementById('grid');
+        table.innerHTML = '';
+        for (let i = 0; i < gridSize; i++) {
+            const row = document.createElement('tr');
+            for (let j = 0; j < gridSize; j++) {
+                const cell = document.createElement('td');
+                const input = document.createElement('input');
+                input.setAttribute('maxlength', '1');
+                input.disabled = true;
+                input.addEventListener('input', handleInput);
+                input.addEventListener('focus', handleFocus);
+                input.addEventListener('blur', handleBlur);
+                input.addEventListener('keydown', handleKeyDown);
+                cell.appendChild(input);
+                row.appendChild(cell);
             }
+            table.appendChild(row);
         }
+    }
 
-        function startGame() {
-            createGrid();
-            crossword.forEach(({ answer, direction, startRow, startCol }) => {
-                for (let i = 0; i < answer.length; i++) {
-                    const row = startRow - 1 + (direction === "vertical" ? i : 0);
-                    const col = startCol - 1 + (direction === "horizontal" ? i : 0);
-                    const cell = document.getElementById("grid").rows[row + 1].cells[col + 1];
-                    const input = cell.querySelector("input");
-                    input.disabled = false;
-                    cell.style.backgroundColor = "white";
-                }
-            });
-            createQuestionTable();
-        }
+    function initializeCrossword() {
+        crossword.forEach(({ answer, direction, startRow, startCol }, index) => {
+            const indicator = document.createElement('span');
+            indicator.textContent = (index + 1).toString();
+            indicator.className = 'indicator';
 
-        function createQuestionTable() {
-            const container = document.getElementById("question-container");
-            container.innerHTML = ""; 
-            const table = document.createElement("table");
-            table.classList.add("question-table");
+            const row = startRow - 1;
+            const col = startCol - 1;
+            const cell = document.getElementById("grid").rows[row].cells[col];
+            cell.style.position = 'relative';
+            cell.appendChild(indicator);
 
-            const tbody = document.createElement("tbody");
-            const horizontalHeader = document.createElement("tr");
-            horizontalHeader.innerHTML = `<td><strong>Horizontais</strong></td>`;
-            tbody.appendChild(horizontalHeader);
+            for (let i = 0; i < answer.length; i++) {
+                const r = startRow - 1 + (direction === "vertical" ? i : 0);
+                const c = startCol - 1 + (direction === "horizontal" ? i : 0);
+                const cell = document.getElementById("grid").rows[r].cells[c];
+                const input = cell.querySelector("input");
+                input.disabled = false;
+                input.dataset.direction = direction; // Adiciona a direção ao dataset
+                input.dataset.startRow = startRow; // Adiciona a linha inicial ao dataset
+                input.dataset.startCol = startCol; // Adiciona a coluna inicial ao dataset
+                input.dataset.index = i; // Adiciona o índice da letra na palavra ao dataset
+                cell.style.backgroundColor = "white";
+            }
+        });
+    }
 
-            crossword
-                .filter(q => q.direction === "horizontal")
-                .forEach(({ question, startRow, startCol }) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `<td class="horizontal-questions">${question} (lin ${startRow}, col ${startCol})</td>`;
-                    tbody.appendChild(row);
-                });
+    function displayQuestions() {
+        const horizontalQuestions = document.getElementById('horizontal-questions');
+        const verticalQuestions = document.getElementById('vertical-questions');
+        horizontalQuestions.innerHTML = '';
+        verticalQuestions.innerHTML = '';
+        crossword.forEach(({ question, answer, direction, startRow, startCol }, index) => {
+            const li = document.createElement('li');
+            li.textContent = `${index + 1}. ${question}`;
 
-            const verticalHeader = document.createElement("tr");
-            verticalHeader.innerHTML = `<td><strong>Verticais</strong></td>`;
-            tbody.appendChild(verticalHeader);
-
-            crossword
-                .filter(q => q.direction === "vertical")
-                .forEach(({ question, startRow, startCol }) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `<td class="vertical-questions">${question} (${startRow}, ${startCol})</td>`;
-                    tbody.appendChild(row);
-                });
-
-            table.appendChild(tbody);
-            container.appendChild(table);
-        }
-
-function checkAnswers() {
-    const table = document.getElementById("grid");
-    let allCorrect = true; // Flag para verificar se todas as respostas estão corretas
-
-    crossword.forEach(({ answer, direction, startRow, startCol }) => {
-        for (let i = 0; i < answer.length; i++) {
-            const row = startRow - 1 + (direction === "vertical" ? i : 0);
-            const col = startCol - 1 + (direction === "horizontal" ? i : 0);
-            const cell = table.rows[row + 1].cells[col + 1];
-            const input = cell.querySelector("input");
-
-            if (input.value.toUpperCase() === answer[i]) {
-                input.classList.add("correct");
-                input.classList.remove("incorrect");
-                cell.style.backgroundColor = "#90EE90"; // Verde para resposta correta
+            if (direction === "horizontal") {
+                horizontalQuestions.appendChild(li);
             } else {
-                input.classList.add("incorrect");
-                input.classList.remove("correct");
-                cell.style.backgroundColor = "orange"; // Laranja para resposta incorreta
-                allCorrect = false; // Se alguma resposta estiver errada
+                verticalQuestions.appendChild(li);
+            }
+        });
+    }
+
+    function handleInput(event) {
+        const input = event.target;
+        const direction = input.dataset.direction;
+        const startRow = parseInt(input.dataset.startRow);
+        const startCol = parseInt(input.dataset.startCol);
+        const index = parseInt(input.dataset.index);
+
+        // Converte para maiúsculas e remove acentuações
+        input.value = input.value.toUpperCase().replace(/[ÁÀÂÃÄáàâãäÉÈÊËéèêëÍÌÎÏíìîïÓÒÔÕÖóòôõöÚÙÛÜúùûüÇç]/g, '');
+
+        // Define a palavra atual
+        if (!currentWord || currentWord.startRow !== startRow || currentWord.startCol !== startCol || currentWord.direction !== direction) {
+            currentWord = crossword.find(c => c.startRow === startRow && c.startCol === startCol && c.direction === direction);
+        }
+
+        // Movimentação automática
+        moveCursor(currentWord, index);
+
+        // Validação apenas ao atingir a última célula
+        if (index === currentWord.answer.length - 1) {
+            validateWord(currentWord);
+        }
+    }
+
+    function handleFocus(event) {
+        const input = event.target;
+        input.select(); // Seleciona o texto na célula ao focar
+        const startRow = parseInt(input.dataset.startRow);
+        const startCol = parseInt(input.dataset.startCol);
+        const direction = input.dataset.direction;
+
+        currentWord = crossword.find(c => c.startRow === startRow && c.startCol === startCol && c.direction === direction);
+    }
+
+    function handleBlur(event) {
+        const input = event.target;
+        const startRow = parseInt(input.dataset.startRow);
+        const startCol = parseInt(input.dataset.startCol);
+        const direction = input.dataset.direction;
+
+        // Verifica se a palavra foi preenchida completamente antes de validar
+        if (currentWord) {
+            const word = getWordFromGrid(currentWord.startRow, currentWord.startCol, currentWord.answer.length, currentWord.direction === "vertical");
+            if (word.length === currentWord.answer.length) {
+                validateWord(currentWord);
             }
         }
-    });
-
-    // Exibir mensagem de resultado após verificação
-    const resultMessage = document.getElementById("result-message");
-    if (allCorrect) {
-        resultMessage.innerText = "Parabéns! Todas as respostas estão corretas.";
-    } else {
-        resultMessage.innerText = "Algumas respostas estão incorretas. Tente novamente.";
-    }
-    resultMessage.style.display = 'block'; // Exibir mensagem de resultado
-
-    // Adicionar opções para continuar ou reiniciar
-    const continueButton = document.createElement("button");
-    continueButton.innerText = "Continuar Jogando";
-    continueButton.onclick = () => {
-        resultMessage.style.display = 'none'; // Esconder mensagem ao continuar
-        createQuestionTable(); // Recria a tabela de perguntas
-        document.getElementById("question-container").style.display = 'block'; // Certifique-se de que a tabela de perguntas está visível
-    };
-
-    const restartButton = document.createElement("button");
-    restartButton.innerText = "Reiniciar Jogo";
-    restartButton.onclick = () => {
-        resultMessage.style.display = 'none'; // Esconder mensagem
-        table.innerHTML = ''; // Limpar o grid
-        document.getElementById("question-container").innerHTML = ""; // Limpar perguntas
-        startGame(); // Reiniciar o jogo
-    };
-
-    resultMessage.appendChild(continueButton);
-    resultMessage.appendChild(restartButton);
-}
-
-
-function showPopup(isCorrect) {
-    const popup = document.getElementById("popup");
-    const message = document.getElementById("popup-message");
-
-    if (isCorrect) {
-        message.textContent = "Parabéns, você acertou todas!";
-    } else {
-        message.textContent = "Está quase lá. Tente novamente!";
     }
 
-    popup.classList.remove("hidden"); // Exibe o popup
-}
+    function handleKeyDown(event) {
+        const input = event.target;
+        const direction = input.dataset.direction;
+        const startRow = parseInt(input.dataset.startRow);
+        const startCol = parseInt(input.dataset.startCol);
+        const index = parseInt(input.dataset.index);
 
-function closePopup() {
-    const popup = document.getElementById("popup");
-    popup.classList.add("hidden"); // Oculta o popup
-    startGame(); // Reinicia o jogo
-}
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            event.preventDefault();
 
- // Funções para mostrar e esconder a dica
-        function showTooltip(event) {
-            const tooltip = document.getElementById('tooltip');
-            tooltip.style.display = 'block';
-            tooltip.style.left = event.pageX + 'px';
-            tooltip.style.top = event.pageY + 'px';
-            tooltip.innerText = "Clique em iniciar e responda na linha e coluna indicada nas perguntas desafio.";
+            let nextRow = startRow - 1;
+            let nextCol = startCol - 1;
+
+            if (event.key === 'ArrowUp') {
+                nextRow -= 1;
+            } else if (event.key === 'ArrowDown') {
+                nextRow += 1;
+            } else if (event.key === 'ArrowLeft') {
+                nextCol -= 1;
+            } else if (event.key === 'ArrowRight') {
+                nextCol += 1;
+            }
+
+            const nextCell = document.getElementById("grid").rows[nextRow]?.cells[nextCol]?.querySelector("input");
+            if (nextCell) {
+                nextCell.focus();
+            }
+        } else if (event.key === 'Tab') {
+            event.preventDefault();
+            moveToNextWord();
+        }
+    }
+
+    function validateWord(wordInfo) {
+        const { startRow, startCol, answer, direction } = wordInfo;
+        const word = getWordFromGrid(startRow, startCol, answer.length, direction === "vertical");
+        const isCorrect = word === answer;
+        updateCells(startRow, startCol, answer.length, isCorrect, direction === "vertical");
+        return isCorrect;
+    }
+
+    function moveCursor(word, index) {
+        const table = document.getElementById("grid");
+        let nextRow = word.startRow - 1;
+        let nextCol = word.startCol - 1;
+
+        if (word.direction === "horizontal") {
+            nextCol += index + 1;
+        } else if (word.direction === "vertical") {
+            nextRow += index + 1;
         }
 
-        function hideTooltip() {
-            const tooltip = document.getElementById('tooltip');
-            tooltip.style.display = 'none';
+        const nextCell = table.rows[nextRow]?.cells[nextCol]?.querySelector("input");
+        if (nextCell) {
+            nextCell.focus();
         }
-    </script>
+    }
 
-  <footer>
-    &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
-  </footer>
+    function getWordFromGrid(startRow, startCol, length, isVertical = false) {
+        const table = document.getElementById("grid");
+        let word = "";
+        for (let i = 0; i < length; i++) {
+            const row = isVertical ? startRow - 1 + i : startRow - 1;
+            const col = isVertical ? startCol - 1 : startCol - 1 + i;
+            const cell = table.rows[row].cells[col];
+            const input = cell.querySelector("input");
+            word += input.value.toUpperCase();
+        }
+        return word;
+    }
 
+    function updateCells(startRow, startCol, length, isCorrect, isVertical = false) {
+        const table = document.getElementById("grid");
+        for (let i = 0; i < length; i++) {
+            const row = isVertical ? startRow - 1 + i : startRow - 1;
+            const col = isVertical ? startCol - 1 : startCol - 1 + i;
+            const cell = table.rows[row].cells[col];
+            cell.style.backgroundColor = isCorrect ? "#90EE90" : "orange";
+        }
+    }
+
+    function checkAnswers() {
+        let allCorrect = true;
+        let allFilled = true;
+
+        crossword.forEach(wordInfo => {
+            const { startRow, startCol, answer, direction } = wordInfo;
+            const word = getWordFromGrid(startRow, startCol, answer.length, direction === "vertical");
+            if (word.length !== answer.length || !word.split('').every((char, index) => char === answer[index])) {
+                allCorrect = false;
+            }
+            if (word.length !== answer.length) {
+                allFilled = false;
+            }
+        });
+
+        if (allCorrect) {
+            document.getElementById('result-message').textContent = "Parabéns, você superou esse desafio!";
+            document.getElementById('play-again').textContent = "Jogar novamente";
+        } else {
+            document.getElementById('result-message').textContent = "Algumas respostas estão incorretas ou ausentes. Tente novamente.";
+            document.getElementById('play-again').textContent = "Continuar jogando";
+        }
+
+        document.getElementById('check-answers').style.display = 'none';
+        document.getElementById('actions').style.display = 'block';
+    }
+
+    function playAgain() {
+        const message = document.getElementById('result-message').textContent;
+        if (message === "Parabéns, você superou esse desafio!") {
+            resetGame();
+        } else {
+            document.getElementById('check-answers').style.display = 'block';
+            document.getElementById('actions').style.display = 'none';
+        }
+    }
+
+    function exitGame() {
+        window.close();
+    }
+
+    function resetGame() {
+        correctWordsCount = 0;
+        currentWord = null;
+        createGrid();
+        initializeCrossword();
+        displayQuestions();
+        document.getElementById('check-answers').style.display = 'block';
+        document.getElementById('actions').style.display = 'none';
+    }
+
+function focusFirstCell() {
+    const firstInput = document.querySelector(`input[data-start-row='${crossword[0].startRow}'][data-start-col='${crossword[0].startCol}']`);
+    if (firstInput) {
+        firstInput.focus();
+    }
+}
+
+function handleKeyDown(event) {
+    const input = event.target;
+    const direction = input.dataset.direction;
+    const startRow = parseInt(input.dataset.startRow);
+    const startCol = parseInt(input.dataset.startCol);
+    const index = parseInt(input.dataset.index);
+
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+
+        let nextRow = startRow - 1;
+        let nextCol = startCol - 1;
+
+        if (event.key === 'ArrowUp') {
+            nextRow -= 1;
+        } else if (event.key === 'ArrowDown') {
+            nextRow += 1;
+        } else if (event.key === 'ArrowLeft') {
+            nextCol -= 1;
+        } else if (event.key === 'ArrowRight') {
+            nextCol += 1;
+        }
+
+        const nextCell = document.getElementById("grid").rows[nextRow]?.cells[nextCol]?.querySelector("input");
+        if (nextCell) {
+            nextCell.focus();
+        }
+    } else if (event.key === 'Tab') {
+        event.preventDefault();
+        moveToNextCell(startRow, startCol, direction, index);
+    }
+}
+
+function moveToNextCell(startRow, startCol, direction, index) {
+    const nextIndex = index + 1;
+    const row = direction === 'vertical' ? startRow + nextIndex - 1 : startRow - 1;
+    const col = direction === 'horizontal' ? startCol + nextIndex - 1 : startCol - 1;
+
+    const nextCell = document.getElementById("grid").rows[row]?.cells[col]?.querySelector("input");
+    if (nextCell) {
+        nextCell.focus();
+    } else {
+        focusNextWord(startRow, startCol, direction);
+    }
+}
+
+function focusNextWord(startRow, startCol, direction) {
+    const currentWordIndex = crossword.findIndex(word => word.startRow === startRow && word.startCol === startCol && word.direction === direction);
+    const nextWord = crossword[currentWordIndex + 1];
+    if (nextWord) {
+        const nextInput = document.querySelector(`input[data-start-row='${nextWord.startRow}'][data-start-col='${nextWord.startCol}']`);
+        if (nextInput) {
+            nextInput.focus();
+        }
+    }
+}
+
+</script>
 </body>
 </html>
