@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://storyboardppd.github.io/hq/fundo/fundo_5.png');
+            background-size: cover;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+	overflow: hidden; /* Impede a rolagem indesejada */
+        }
+        header {
+            display: flex;
+            justify-content: center;
+	background-color: rgba(255, 255, 255, 0.8);
+            align-items: center;
+            padding: 10px 0;
+            position: relative;
+        }
+        header img {
+            position: absolute;
+            left: 10px;
+            height: 50px; /* Ajuste a altura conforme necessário */
+        }
+        #iniciarButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em; /* Tamanho da fonte mais responsivo */
+            position: relative; /* Para posicionar a dica em relação ao botão */
+        }
+        #palavra {
+            font-size: 26px;
+            letter-spacing: 2px;
+            text-align: center; /* Centraliza a palavra secreta */
+            margin: 20px 0; /* Espaço acima e abaixo */
+            color: white;
+            font-weight: bold;
+        }
+        #info {
+            display: flex;
+            justify-content: center; /* Centraliza as informações */
+            align-items: center;
+            margin: 10px;
+            width: 100%;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        #info div {
+            margin: 0 20px; /* Espaçamento entre os elementos */
+	  font-weight: bold;
+	  font-color: blue;
+        }
+        #teclado {
+            border: 2px solid gray;
+            border-radius: 10px;
+            padding: 10px;
+            display: table; /* Para centralizar a tabela */
+            margin: 20px auto; /* Espaço entre o teclado e os elementos */
+        }
+        .teclado {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 5px;
+        }
+        .teclado button {
+            background-color: green;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 9px; /* Tamanho reduzido do botão */
+            cursor: pointer;
+	border-radius: 4px;
+        }
+        #game-container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        #forca {
+            text-align: center;
+            margin-right: 20px;
+        }
+        #perguntas {
+            text-align: left;
+            margin-left: 20px;
+	font-size: 0.9em;
+        }
+        footer {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: left;
+            padding: 10px 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #F09319;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+        #overlay {
+            display: none;
+	border: none;
+	border-radius: 5px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+        }
+
+        #tooltip {
+            display: none; /* Inicialmente escondido */
+            position: absolute; /* Posicionamento absoluto em relação ao botão */
+            background: #F09319;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 0.9em;
+            z-index: 101; /* Deve estar acima do botão */
+            width: 300px; /* Largura fixa para a dica */
+            text-align: center;
+            top: 90%; /* Coloca a dica logo abaixo do botão */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+	.checkbox-item {
+	    margin-bottom: 10px; /* Ajuste o valor conforme necessário */
+	}
+
+    </style>
+</head>
+<body>
+    <header>
+    <img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo">
+    <h1 style="font-family: Arial, sans-serif;  font-size: 26px; margin: 0;text-align:justify;color: #0000CC;">Jogo da Forca sobre Privacidade - Newsletter Outubro/2025</h1>
+  </header>
+
+    <button id="iniciarButton" 
+        onmouseover="mostrarDica()" 
+        onmouseout="esconderDica()" 
+        onclick="iniciarJogo()">Iniciar
+        <div id="tooltip">Selecione o desafio e use o "teclado virtual". Quantos pontos você consegue? </div>
+    </button>
+
+    <div id="teclado" style="display: none;">
+        <div class="teclado"></div>
+    </div>
+
+    <div id="palavra"></div>
+    <div id="info">
+        <div id="erros">Erros: 0</div>
+        <div id="pontuacao">Pontuação: 0</div>
+    </div>
+    
+    <div id="game-container">
+        <div id="forca">
+            <img src="img1.png" alt="Forca" />
+        </div>
+        <div id="perguntas"></div>
+    </div>
+
+    <footer>
+        &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
+    </footer>
+
+    <div id="overlay"></div>
+    <div id="popup">
+        <p id="popupMessage"></p>
+        <button onclick="fecharPopup()">Fechar</button>
+    </div>
+
+    <script>
+	const perguntas = [
+            { question: "Princípio que garante consulta facilitada e gratuita sobre a forma e a duração do tratamento de seus dados pessoais", answer: "LIVREACESSO", nota: 10 },
+            { question: "Remoção de informações pessoais de modo que a pessoa não possa ser identificada, segundo a LGPD", answer: "ANONIMIZACAO", nota: 10 },
+            { question: "PrivacyBy........ visa proteger a privacidade dos dados pessoais desde a concepção", answer: "DEFAULT", nota: 10 },
+            { question: "Pessoa indicada por agente de tratamento para atuar como canal de comunicação com titulares e ANPD", answer: "ENCARREGADO", nota: 10 },
+            { question: "Exemplo de tratamento de dados pessoais", answer: "ARMAZENAMENTO", nota: 10 },
+            { question: "Agente de tratamento de dados pessoais", answer: "OPERADOR", nota: 10 },
+            { question: "Informação relacionada a pessoa natural identificada ou identificável", answer: "DADOPESSOAL", nota: 10 },
+            { question: "Visa garantir que os dados e sistemas estão acessíveis e funcionando quando necessário", answer: "DISPONIBILIDADE", nota: 10 },
+            { question: "Hipótese de não aplicação da LGPD quando os dados pessoais são tratados exclusivamente para...", answer: "DEFESANACIONAL", nota: 10 },
+            { question: "Documentação do controlador que descreve os processos de tratamento de dados pessoais que podem gerar riscos ao titular e as salvaguardas e mecanismos para mitigar riscos", nota: 10 }
+        ];
+       
+        let palavraSecreta = '';
+        let letrasAdivinhadas = [];
+        let erros = 0;
+        let pontuacao = 0;
+        let desafiosConcluidos = 0; // Contador de desafios concluídos
+//        let contador_checkbox_selecionados = 0;
+        let contador_acertos = 0;
+        let contador_erros = 0;
+
+        // Função para iniciar o jogo
+        function iniciarJogo() {
+            const perguntasDiv = document.getElementById('perguntas');
+            perguntasDiv.innerHTML = '';
+            perguntas.forEach((pergunta, index) => {
+        perguntasDiv.innerHTML += `<div class="checkbox-item">
+            <input type="checkbox" id="pergunta${index}" value="${pergunta.answer}" data-nota="${pergunta.nota}" onchange="selecionarPergunta(this)"> 
+            ${pergunta.question} (${pergunta.nota})
+        </div>`;
+            });
+
+            // Exibe o teclado virtual
+            document.getElementById('teclado').style.display = 'table'; 
+            resetarJogo(); // Reseta o estado do jogo
+        }
+
+// Função para mostrar a dica
+        function mostrarDica() {
+            document.getElementById('tooltip').style.display = 'block';
+        }
+
+        // Função para esconder a dica
+        function esconderDica() {
+            document.getElementById('tooltip').style.display = 'none';
+        }
+
+        // Função para selecionar a pergunta
+        function selecionarPergunta(checkbox) {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            checkboxes.forEach(cb => {
+                if (cb !== checkbox) {
+                    cb.disabled = true; // Desabilita outros checkboxes
+                } else {
+                    cb.checked = true; // Marca a checkbox selecionada
+                }
+            });
+            palavraSecreta = checkbox.value;
+            letrasAdivinhadas = [];
+            erros = 0;
+//	  contador_checkbox_selecionados++; // Incrementa o contador de checkboxes que foram selecionados
+            mostrarPalavra();
+            atualizarForca();
+            criarTeclado();
+        }
+
+        // Função para mostrar a palavra
+        function mostrarPalavra() {
+            const palavraDisplay = palavraSecreta.split('').map(letra => letrasAdivinhadas.includes(letra) ? letra : '_').join(' ');
+            document.getElementById('palavra').innerText = palavraDisplay;
+            document.getElementById('erros').innerText = `Erros: ${erros}`;
+            document.getElementById('pontuacao').innerText = `Pontuação acumulada: ${pontuacao}`;
+
+           // Verifica se a palavra foi adivinhada corretamente
+            if (!palavraDisplay.includes('_')) {
+                const checkbox = document.querySelector('input[type=checkbox]:checked');
+                pontuacao += parseInt(checkbox.getAttribute('data-nota')); // Acumula pontos de acordo com a nota da pergunta
+//               desafiosConcluidos++; // Incrementa o contador de desafios
+               contador_acertos++;
+//	      alert('variável respostas corretas ' + desafiosConcluidos);
+
+	// Verifica quantidade de respostas certas 
+         if (desafiosConcluidos === 10) { 
+                    mostrarMensagemPersonalizada(); // Chama a função para mostrar a mensagem personalizada
+                } else {
+              mostrarPopup(`Você acertou e tem ${pontuacao} pontos acumulados!`);
+	    document.getElementById('pontuacao').innerText = `Pontuação acumulada: ${pontuacao}`; //atualiza a seção Info (by Marco)
+                }
+	
+                habilitarCheckboxes();
+           //     reiniciarJogo(); // Reinicia o jogo após acerto
+            }
+            if (erros >= 7) {
+                   contador_erros++;
+		mostrarPopup(`Você errou! A palavra era: ${palavraSecreta}`);
+                   habilitarCheckboxes();
+   //             reiniciarJogo(); // Reinicia o jogo após erro
+            }
+
+	// Verifica se respondeu as 10 questões, ejam certas ou erradas
+	if ((contador_erros + contador_acertos) === 10) {  	
+		mostrarMensagemPersonalizada(); 
+	}
+        }
+
+
+        // Função para mostrar a mensagem personalizada
+        function mostrarMensagemPersonalizada() {
+            let mensagem = '';
+            if (pontuacao <= 60) {
+                mensagem = `Você obteve ${pontuacao} pontos e está no caminho do aprendizado!`;
+            } else if (pontuacao >= 70 && pontuacao < 100) {
+                mensagem = `Muito bom! Você conquistou ${pontuacao} pontos e é um Ninja da Privacidade!!`;
+            } else if (pontuacao === 100) {
+                mensagem = "Excelente desempenho!! Superou as expectativas. É o Mestre Jedi da Privacidade!";
+            }
+            mostrarPopup(mensagem);
+        }
+
+        // Função para habilitar checkboxes
+        function habilitarCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            checkboxes.forEach(cb => {
+                if (!cb.checked) {
+                    cb.disabled = false; // Habilita apenas os checkboxes não selecionados
+                }
+            });
+        }
+
+        // Função para reiniciar o jogo
+        function resetarJogo() {
+            letrasAdivinhadas = [];
+            erros = 0;
+            desafiosConcluidos = 0
+            pontuacao = 0; // Reseta a pontuação
+            document.getElementById('palavra').innerText = '';
+            document.getElementById('forca').innerHTML = `<img src="img/img1.png" alt="Forca" />`;
+            document.getElementById('erros').innerText = 'Erros: 0';
+            document.getElementById('pontuacao').innerText = 'Pontuação: 0';
+            document.querySelector('.teclado').innerHTML = ''; // Limpa o teclado
+            criarTeclado(); // Chama a função para criar o teclado
+        }
+
+        // Função para adivinhar letras
+        function adivinhar(letra) {
+            if (letra && !letrasAdivinhadas.includes(letra)) {
+                letrasAdivinhadas.push(letra);
+                if (!palavraSecreta.includes(letra)) {
+                    erros++;
+                }
+                mostrarPalavra();
+                atualizarForca();
+            }
+        }
+
+        // Função para atualizar a figura da forca
+        function atualizarForca() {
+            document.getElementById('forca').innerHTML = `<img src="img/img${Math.min(erros + 1, 7)}.png" alt="Forca">`;
+        }
+
+        // Função para criar o teclado virtual
+        function criarTeclado() {
+            const tecladoDiv = document.querySelector('.teclado');
+            tecladoDiv.innerHTML = '';
+            const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            letras.forEach(letra => {
+                const button = document.createElement('button');
+                button.innerText = letra;
+                button.onclick = () => adivinhar(letra); // Chama a função adivinhar com a letra selecionada.
+                tecladoDiv.appendChild(button);
+            });
+        }
+
+        // Função para mostrar o popup
+        function mostrarPopup(mensagem) {
+            document.getElementById('popupMessage').innerText = mensagem;
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // Função para fechar o popup
+        function fecharPopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Executar funções após o carregamento da página
+        document.addEventListener('DOMContentLoaded', () => {
+            iniciarJogo(); // Chama a função para iniciar o jogo
+            criarTeclado(); // Chama a função para criar o teclado
+        });
+    </script>
+</body>
+</html>
