@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://storyboardppd.github.io/hq/fundo/fundo_5.png');
+            background-size: cover;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            align-items: center;
+            padding: 10px 0;
+            position: relative;
+        }
+        header img {
+            position: absolute;
+            left: 10px;
+            height: 40px;
+        }
+        #palavra {
+            font-size: 30px;
+            letter-spacing: 2px;
+            text-align: center;
+            margin: 70px 0 20px; /* Adicionei uma margem superior maior */
+            color: white;
+            font-weight: bold;
+        }
+        #info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px; /* Aumenta o espaço superior */
+            width: 100%;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        #info div {
+            margin: 0 15px;
+        }
+        #game-container {
+            max-width: 1100px;
+            margin: 16px auto; /* Aumenta o espaço superior */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            height: 300px; /* Altura fixa do container */
+        }
+        #forca {
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column; /* Alinha verticalmente os itens */
+            align-items: center; /* Centraliza horizontalmente */
+            justify-content: center; /* Centraliza verticalmente */
+        }
+        #forca img {
+            max-height: 100%; /* Adapta o tamanho da imagem à área disponível */
+            max-width: 100%; /* Impede que a imagem ultrapasse os limites */
+        }
+        #erros {
+            font-weight: bold; /* Define o texto como negrito */
+            font-size: 1.2em;
+        }
+        #perguntas {
+            text-align: left;
+            flex: 2;
+            font-size: 1.6em; /* Aumenta o tamanho do texto da pergunta */
+            display: flex;
+            flex-direction: column; /* Permite alinhar itens verticalmente */
+            align-items: center; /* Centraliza horizontalmente */
+            justify-content: center; /* Centraliza verticalmente */
+            text-align: center;
+        }
+        #incentivo {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px; /* Espaço acima da mensagem de incentivo */
+        }
+        footer {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: left;
+            padding: 10px 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        #mensagem {
+            margin-top: 20px;
+            text-align: center;
+            background-color: #F09319;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 15px;
+            display: none; /* Esconde a mensagem inicialmente */
+        }
+        #mensagem button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #mensagem button#sair {
+            background-color: red;
+        }
+        #mensagem span {
+            display: block;
+            margin-top: 10px;
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+        /* Overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #overlay-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 80%;
+        }
+        #overlay-content p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        #overlay-content button {
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            #game-container {
+                flex-direction: column;
+                height: auto;
+            }
+            #forca, #perguntas {
+                flex: none;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 20px;
+            }
+            #palavra {
+                font-size: 16px;
+            }
+            #info {
+                font-size: 16px;
+            }
+            #perguntas {
+                font-size: 1.2em;
+            }
+            #mensagem {
+                font-size: 1em;
+            }
+            #mensagem button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo">
+        <h1 style="font-family: Arial, sans-serif; font-size: 26px; margin: 0; text-align: justify; color: #0000CC;">Jogo da Forca sobre Privacidade - Newsletter Junho/2025</h1>
+    </header>
+
+    <div id="palavra"></div>
+    
+    <div id="game-container">
+        <div id="forca">
+            <div id="erros">Erros: 0</div>
+            <img src="img1.png" alt="Forca" />
+        </div>
+        <div id="perguntas">
+            <p id="perguntaTexto"></p>
+            <p id="incentivo"></p>
+        </div>
+    </div>
+
+    <div id="mensagem">
+        <p id="mensagemTexto"></p>
+        <button onclick="proximaPergunta()">Próximo Desafio</button>
+        <button id="sair" onclick="sairJogo()">Sair</button>
+        <button id="reiniciar" style="display: none;" onclick="reiniciarJogo()">Sim</button>
+        <span id="resultados"></span>
+    </div>
+
+    <footer>
+        &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
+    </footer>
+
+    <div id="overlay">
+        <div id="overlay-content">
+            <p>Topa o desafio de aprender brincando? Adivinhe a palavra secreta.</p>
+            <button id="prosseguirBtn" onclick="fecharOverlay()">Prosseguir</button>
+        </div>
+    </div>
+
+    <script>
+        const perguntas = [
+                            { question: "Adesão a normas e regulamentos legais, incluindo os relacionados à proteção de dados e privacidade.", answer: "CONFORMIDADE", nota: 10 },
+                            { question: "Dado relativo a titular que não possa ser identificado, considerando a utilização de meios técnicos razoáveis e disponíveis na ocasião de seu tratamento.", answer: "DADOANONIMIZADO", nota: 10 },
+                            { question: "Direito do titular de transferir seus dados a outro controlador.", answer: "DIREITODEPORTABILIDADE", nota: 10 },
+                            { question: "É uma solicitação realizada pelo titular de dados pessoais à Autoridade Nacional de Proteção de Dados (ANPD), quando não conseguir exercer seus direitos perante o controlador de dados pessoais.", answer: "PETICAODOTITULAR", nota: 10 },
+                            { question: "Documento que descreve como uma empresa coleta, usa, compartilha e protege os dados pessoais dos seus usuários.", answer: "POLITICADEPRIVACIDADE", nota: 10 },
+                            { question: "É finalidade do relatório de impacto (RIPD) a avaliação de ....", answer: "RISCOS", nota: 10 },
+                            { question: "Avaliação de proporcionalidade realizada com base no contexto e nas circunstâncias específicas do tratamento, que deve levar em consideração os impactos e os riscos aos direitos e liberdades dos titulares.", answer: "TESTEDEBALANCEAMENTO", nota: 10 },
+                            { question: "É um teste que deve ser realizado sempre que o controlador e/ou terceiro optar por justificar ou entender aplicável a utilização da base legal do Legítimo Interesse.", answer: "TESTEDOLEGITIMOINTERESSE", nota: 10 },
+                            { question: "Ato de transferir dados para outro país.", answer: "TRANSFERENCIAINTERNACIONAL", nota: 10 },
+                            { question: "Fraqueza que pode ser explorada para causar um incidente de segurança.", answer: "VULNERABILIDADE", nota: 10 }
+                          ];
+
+        let palavraSecreta = '';
+        let letrasAdivinhadas = [];
+        let erros = 0;
+        let acertosTotais = 0;
+        let errosTotais = 0;
+        let perguntasRestantes = [...perguntas]; // Copia das perguntas restantes
+
+        document.addEventListener('DOMContentLoaded', () => {
+            iniciarJogo();
+            document.getElementById('prosseguirBtn').focus(); // Foca no botão "Prosseguir"
+        });
+
+        // Permitir uso do teclado convencional
+        document.addEventListener('keydown', (event) => {
+            const letra = event.key.toUpperCase();
+            if (/^[A-Z]$/.test(letra)) { // Verifica se a tecla pressionada é uma letra
+                adivinhar(letra);
+            }
+        });
+
+        // Função para iniciar ou reiniciar o jogo
+        function iniciarJogo() {
+            if (perguntasRestantes.length === 0) {
+                mostrarMensagemFinal();
+                return;
+            }
+
+            resetarJogo();
+            const index = Math.floor(Math.random() * perguntasRestantes.length);
+            const perguntaAleatoria = perguntasRestantes.splice(index, 1)[0];
+            palavraSecreta = perguntaAleatoria.answer;
+            document.getElementById('perguntaTexto').innerText = perguntaAleatoria.question;
+            mostrarPalavra();
+        }
+
+        function mostrarPalavra() {
+            const palavraDisplay = palavraSecreta.split('').map(letra => letrasAdivinhadas.includes(letra) ? letra : '_').join(' ');
+            document.getElementById('palavra').innerText = palavraDisplay;
+            document.getElementById('erros').innerText = `Erros: ${erros}`;
+            if (!palavraDisplay.includes('_')) {
+                acertosTotais++;
+                mostrarMensagem("Parabéns! Você acertou! Deseja continuar?");
+            } else if (erros >= 6) {
+                errosTotais++;
+                mostrarMensagem(`Você perdeu! A palavra era: ${palavraSecreta}. Deseja continuar?`);
+            }
+        }
+
+        function mostrarMensagem(mensagem) {
+            const mensagemDiv = document.getElementById('mensagem');
+            document.getElementById('mensagemTexto').innerText = mensagem;
+            document.getElementById('resultados').innerHTML = `Acertos: ${acertosTotais} - Erros: ${errosTotais}`;
+            if (acertosTotais > 5) {
+                let mensagemIncentivo = '';
+                switch (acertosTotais) {
+                    case 6:
+                        mensagemIncentivo = 'Você está indo muito bem!';
+                        break;
+                    case 7:
+                        mensagemIncentivo = 'Que demais, vamos em frente!';
+                        break;
+                    case 8:
+                        mensagemIncentivo = 'Você é fera mesmo, hein?!';
+                        break;
+                    case 9:
+                        mensagemIncentivo = 'UAU... é (a)o Ninja do assunto!';
+                        break;
+                    case 10:
+                        mensagemIncentivo = 'Show!!!! Abram alas para a(o) Mestre Jedai da Privacidade!';
+                        break;
+                }
+                document.getElementById('incentivo').innerHTML = mensagemIncentivo;
+            } else {
+                document.getElementById('incentivo').innerHTML = '';
+            }
+            mensagemDiv.style.display = 'block';
+            document.querySelector('#mensagem button').focus(); // Foca no botão "Próximo Desafio"
+        }
+
+        function mostrarMensagemFinal() {
+            const mensagemDiv = document.getElementById('mensagem');
+            document.getElementById('mensagemTexto').innerText = 'Você completou todas as questões! Deseja recomeçar?';
+            document.getElementById('resultados').innerHTML = `Acertos: ${acertosTotais} - Erros: ${errosTotais}`;
+            document.querySelector('button[onclick="proximaPergunta()"]').style.display = 'none';
+            document.getElementById('reiniciar').style.display = 'inline';
+            mensagemDiv.style.display = 'block';
+            document.querySelector('#mensagem button').focus();
+        }
+
+        function proximaPergunta() {
+            const mensagemDiv = document.getElementById('mensagem');
+            mensagemDiv.style.display = 'none'; // Esconde a mensagem
+            iniciarJogo(); // Carrega uma nova pergunta
+        }
+
+        function sairJogo() {
+            window.open('', '_self', ''); // Hack para permitir o fechamento da janela em alguns navegadores
+            window.close(); // Tenta fechar a janela do navegador
+        }
+
+        function reiniciarJogo() {
+            perguntasRestantes = [...perguntas]; // Reinicia as perguntas
+            acertosTotais = 0;
+            errosTotais = 0;
+            document.getElementById('reiniciar').style.display = 'none';
+            document.querySelector('button[onclick="proximaPergunta()"]').style.display = 'inline';
+            proximaPergunta(); // Inicia uma nova rodada
+        }
+
+        function adivinhar(letra) {
+            if (letra && !letrasAdivinhadas.includes(letra)) {
+                letrasAdivinhadas.push(letra);
+                if (!palavraSecreta.includes(letra)) {
+                    erros++;
+                }
+                mostrarPalavra();
+                atualizarForca();
+            }
+        }
+
+        function atualizarForca() {
+            document.getElementById('forca').querySelector('img').src = `img/img${Math.min(erros + 1, 7)}.png`;
+        }
+
+        function resetarJogo() {
+            letrasAdivinhadas = [];
+            erros = 0;
+            document.getElementById('palavra').innerText = '';
+            document.getElementById('forca').querySelector('img').src = `img/img1.png`;
+            document.getElementById('erros').innerText = 'Erros: 0';
+            document.getElementById('incentivo').innerHTML = ''; // Limpa a mensagem de incentivo
+        }
+
+        function fecharOverlay() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
