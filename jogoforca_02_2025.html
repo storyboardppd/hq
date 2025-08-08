@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo da Forca</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://storyboardppd.github.io/hq/fundo/fundo_5.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    header img {
+      position: absolute;
+      left: 10px;
+      height: 40px;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      margin: 0 60px 0 60px;
+      color: #0000CC;
+      text-align: center;
+    }
+
+    #iniciarButton {
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    #tooltip {
+      display: none;
+      position: absolute;
+      top: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #F09319;
+      color: black;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      width: 90%;
+      max-width: 300px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    #palavra {
+      font-size: 1.5rem;
+      letter-spacing: 3px;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+      margin: 20px auto;
+    }
+
+    #info {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    #teclado {
+      margin: 20px auto;
+      padding: 10px;
+      border: 2px solid gray;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .teclado {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+      gap: 8px;
+    }
+
+    .teclado button {
+      padding: 10px;
+      background-color: green;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    #game-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 1100px;
+    }
+
+    #forca {
+      flex: 1 1 250px;
+      text-align: center;
+    }
+
+    #forca img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    #perguntas {
+      flex: 1 1 300px;
+      font-size: 0.95rem;
+    }
+
+    .checkbox-item {
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background-color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    #popup, #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+    }
+
+    #popup {
+      display: none;
+      background-color: #F09319;
+      color: black;
+      width: 90%;
+      max-width: 400px;
+      margin: auto;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 1010;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    #popup button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #overlay {
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1005;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1rem;
+        margin: 0 40px;
+      }
+
+      #info {
+        font-size: 0.9rem;
+      }
+
+      .teclado button {
+        font-size: 0.8rem;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<!-- O restante do HTML e JavaScript permanece igual -->
+<body>
+    <header>
+    <img src="https://storyboardppd.github.io/hq/marca-serpro.png" alt="Logo">
+    <h1 style="font-family: Arial, sans-serif;  font-size: 26px; margin: 0;text-align:justify;color: #0000CC;">Jogo da Forca sobre Privacidade - Newsletter Fevereiro/2025</h1>
+  </header>
+
+    <button id="iniciarButton" 
+        onmouseover="mostrarDica()" 
+        onmouseout="esconderDica()" 
+        onclick="iniciarJogo()">Iniciar
+        <div id="tooltip">Selecione o desafio e use o "teclado virtual". Quantos pontos você consegue? </div>
+    </button>
+
+    <div id="teclado" style="display: none;">
+        <div class="teclado"></div>
+    </div>
+
+    <div id="palavra"></div>
+    <div id="info">
+        <div id="erros">Erros: 0</div>
+        <div id="pontuacao">Pontuação: 0</div>
+    </div>
+    
+    <div id="game-container">
+        <div id="forca">
+            <img src="img1.png" alt="Forca" />
+        </div>
+        <div id="perguntas"></div>
+    </div>
+
+    <footer>
+        &copy; 2025 Departamento de Privacidade e Proteção de Dados Pessoais.
+    </footer>
+
+    <div id="overlay"></div>
+    <div id="popup">
+        <p id="popupMessage"></p>
+        <button onclick="fecharPopup()">Fechar</button>
+    </div>
+
+    <script>
+        const perguntas = [
+            { question: "Processo de examinar e avaliar os dados e os sistemas de proteção para garantir que estão em conformidade com as leis e políticas de privacidade.", answer: "AUDITORIADEDADOS", nota: 10 },
+            { question: "Documento que explica como uma empresa ou organização trata os dados pessoais dos seus clientes, usuários, colaboradores, parceiros, entre outros.", answer: "AVISODEPRIVACIDADE", nota: 10 },
+            { question: "Conjunto de normas e diretrizes que as empresas devem seguir para garantir a proteção de dados pessoais.", answer: "CODIGOSDECONDUTA", nota: 10 },
+            { question: "Garantia de que as informações serão acessadas apenas por pessoas autorizadas.", answer: "CONFIDENCIALIDADE", nota: 10 },
+            { question: "Medida técnica para garantir que os dados sejam acessados somente por pessoas autorizadas, que consiste em processos de autenticação, autorização e auditoria.", answer: "CONTROLEDEACESSO", nota: 10 },
+            { question: "Direito do titular em saber como seus dados são tratados, a lógica por trás do tratamento dos dados pessoais e os impactos sobre seus direitos.", answer: "DIREITOAEXPLICACAO", nota: 10 },
+            { question: "Ferramentas físicas ou digitais usadas para proteger dados, como senhas, chaves de segurança e dispositivos criptográficos.", answer: "DISPOSITIVOSDESEGURANCA", nota: 10 },
+            { question: "É um mapeamento dos dados pessoais que permite entender como eles são coletados, processados e armazenados.", answer: "INVENTARIODEDADOS", nota: 10 },
+            { question: "Princípio que proíbe o tratamento de dados de forma discriminatória.", answer: "NAODISCRIMINACAO", nota: 10 },
+            { question: "São os principais pilares da proteção de dados ....", answer: "PESSOASPROCESSOSTECNOLOGIA", nota: 10 }
+        ];
+
+        let palavraSecreta = '';
+        let letrasAdivinhadas = [];
+        let erros = 0;
+        let pontuacao = 0;
+        let desafiosConcluidos = 0; // Contador de desafios concluídos
+//        let contador_checkbox_selecionados = 0;
+        let contador_acertos = 0;
+        let contador_erros = 0;
+
+        // Função para iniciar o jogo
+        function iniciarJogo() {
+            const perguntasDiv = document.getElementById('perguntas');
+            perguntasDiv.innerHTML = '';
+            perguntas.forEach((pergunta, index) => {
+        perguntasDiv.innerHTML += `<div class="checkbox-item">
+            <input type="checkbox" id="pergunta${index}" value="${pergunta.answer}" data-nota="${pergunta.nota}" onchange="selecionarPergunta(this)"> 
+            ${pergunta.question} (${pergunta.nota})
+        </div>`;
+            });
+
+            // Exibe o teclado virtual
+            document.getElementById('teclado').style.display = 'table'; 
+            resetarJogo(); // Reseta o estado do jogo
+        }
+
+// Função para mostrar a dica
+        function mostrarDica() {
+            document.getElementById('tooltip').style.display = 'block';
+        }
+
+        // Função para esconder a dica
+        function esconderDica() {
+            document.getElementById('tooltip').style.display = 'none';
+        }
+
+        // Função para selecionar a pergunta
+        function selecionarPergunta(checkbox) {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            checkboxes.forEach(cb => {
+                if (cb !== checkbox) {
+                    cb.disabled = true; // Desabilita outros checkboxes
+                } else {
+                    cb.checked = true; // Marca a checkbox selecionada
+                }
+            });
+            palavraSecreta = checkbox.value;
+            letrasAdivinhadas = [];
+            erros = 0;
+//	  contador_checkbox_selecionados++; // Incrementa o contador de checkboxes que foram selecionados
+            mostrarPalavra();
+            atualizarForca();
+            criarTeclado();
+        }
+
+        // Função para mostrar a palavra
+        function mostrarPalavra() {
+            const palavraDisplay = palavraSecreta.split('').map(letra => letrasAdivinhadas.includes(letra) ? letra : '_').join(' ');
+            document.getElementById('palavra').innerText = palavraDisplay;
+            document.getElementById('erros').innerText = `Erros: ${erros}`;
+            document.getElementById('pontuacao').innerText = `Pontuação acumulada: ${pontuacao}`;
+
+           // Verifica se a palavra foi adivinhada corretamente
+            if (!palavraDisplay.includes('_')) {
+                const checkbox = document.querySelector('input[type=checkbox]:checked');
+                pontuacao += parseInt(checkbox.getAttribute('data-nota')); // Acumula pontos de acordo com a nota da pergunta
+//               desafiosConcluidos++; // Incrementa o contador de desafios
+               contador_acertos++;
+//	      alert('variável respostas corretas ' + desafiosConcluidos);
+
+	// Verifica quantidade de respostas certas 
+         if (desafiosConcluidos === 10) { 
+                    mostrarMensagemPersonalizada(); // Chama a função para mostrar a mensagem personalizada
+                } else {
+              mostrarPopup(`Você acertou e tem ${pontuacao} pontos acumulados!`);
+	    document.getElementById('pontuacao').innerText = `Pontuação acumulada: ${pontuacao}`; //atualiza a seção Info (by Marco)
+                }
+	
+                habilitarCheckboxes();
+           //     reiniciarJogo(); // Reinicia o jogo após acerto
+            }
+            if (erros >= 7) {
+                   contador_erros++;
+		mostrarPopup(`Você errou! A palavra era: ${palavraSecreta}`);
+                   habilitarCheckboxes();
+   //             reiniciarJogo(); // Reinicia o jogo após erro
+            }
+
+	// Verifica se respondeu as 10 questões, ejam certas ou erradas
+	if ((contador_erros + contador_acertos) === 10) {  	
+		mostrarMensagemPersonalizada(); 
+	}
+        }
+
+
+        // Função para mostrar a mensagem personalizada
+        function mostrarMensagemPersonalizada() {
+            let mensagem = '';
+            if (pontuacao <= 60) {
+                mensagem = `Você obteve ${pontuacao} pontos e está no caminho do aprendizado!`;
+            } else if (pontuacao >= 70 && pontuacao < 100) {
+                mensagem = `Muito bom! Você conquistou ${pontuacao} pontos e é um Ninja da Privacidade!!`;
+            } else if (pontuacao === 100) {
+                mensagem = "Excelente desempenho!! Superou as expectativas. É o Mestre Jedi da Privacidade!";
+            }
+            mostrarPopup(mensagem);
+        }
+
+        // Função para habilitar checkboxes
+        function habilitarCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            checkboxes.forEach(cb => {
+                if (!cb.checked) {
+                    cb.disabled = false; // Habilita apenas os checkboxes não selecionados
+                }
+            });
+        }
+
+        // Função para reiniciar o jogo
+        function resetarJogo() {
+            letrasAdivinhadas = [];
+            erros = 0;
+            desafiosConcluidos = 0
+            pontuacao = 0; // Reseta a pontuação
+            document.getElementById('palavra').innerText = '';
+            document.getElementById('forca').innerHTML = `<img src="img/img1.png" alt="Forca" />`;
+            document.getElementById('erros').innerText = 'Erros: 0';
+            document.getElementById('pontuacao').innerText = 'Pontuação: 0';
+            document.querySelector('.teclado').innerHTML = ''; // Limpa o teclado
+            criarTeclado(); // Chama a função para criar o teclado
+        }
+
+        // Função para adivinhar letras
+        function adivinhar(letra) {
+            if (letra && !letrasAdivinhadas.includes(letra)) {
+                letrasAdivinhadas.push(letra);
+                if (!palavraSecreta.includes(letra)) {
+                    erros++;
+                }
+                mostrarPalavra();
+                atualizarForca();
+            }
+        }
+
+        // Função para atualizar a figura da forca
+        function atualizarForca() {
+            document.getElementById('forca').innerHTML = `<img src="img/img${Math.min(erros + 1, 7)}.png" alt="Forca">`;
+        }
+
+        // Função para criar o teclado virtual
+        function criarTeclado() {
+            const tecladoDiv = document.querySelector('.teclado');
+            tecladoDiv.innerHTML = '';
+            const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            letras.forEach(letra => {
+                const button = document.createElement('button');
+                button.innerText = letra;
+                button.onclick = () => adivinhar(letra); // Chama a função adivinhar com a letra selecionada.
+                tecladoDiv.appendChild(button);
+            });
+        }
+
+        // Função para mostrar o popup
+        function mostrarPopup(mensagem) {
+            document.getElementById('popupMessage').innerText = mensagem;
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // Função para fechar o popup
+        function fecharPopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Executar funções após o carregamento da página
+        document.addEventListener('DOMContentLoaded', () => {
+            iniciarJogo(); // Chama a função para iniciar o jogo
+            criarTeclado(); // Chama a função para criar o teclado
+        });
+    </script>
+</body>
+</html>
